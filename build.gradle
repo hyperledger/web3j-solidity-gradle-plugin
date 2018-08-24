@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'maven'
+    id 'maven-publish'
+}
+
+group = 'org.web3j'
+version = '0.1.0'
+description = 'Solidity Gradle Plugin'
+
+gradlePlugin {
+    plugins {
+        solidity {
+            id = 'solidity'
+            implementationClass = 'org.web3j.solidity.gradle.plugin.SolidityPlugin'
+        }
+    }
+    testSourceSets sourceSets.test
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+publishing {
+    publications {
+        pluginPublication(MavenPublication) {
+            from components.java
+            groupId 'org.web3j'
+            artifactId 'solidity-gradle-plugin'
+            version version
+        }
+    }
+}
