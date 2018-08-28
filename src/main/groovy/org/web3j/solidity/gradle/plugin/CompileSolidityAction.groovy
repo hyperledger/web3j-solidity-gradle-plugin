@@ -11,8 +11,8 @@ import static org.web3j.solidity.gradle.plugin.SoliditySourceSet.NAME
  * Gradle action configuring code compilation tasks for the
  * Solidity source sets defined in the project (e.g. main, test).
  * <p>
- * For instance, the generated task name for the <code>main</code> source set
- * will be <code>compileMainSolidity</code> and for <code>test</code>,
+ * By default the generated task name for the <code>main</code> source set
+ * is <code>compileSolidity</code> and for <code>test</code>
  * <code>compileTestSolidity</code>.
  */
 class CompileSolidityAction implements Action<SourceSet> {
@@ -36,8 +36,15 @@ class CompileSolidityAction implements Action<SourceSet> {
 
         // Set the sources for the generation task
         compileTask.setSource(soliditySourceSet.solidity)
-        compileTask.outputs.dir("$project.buildDir/resources/$sourceSet.name/$NAME")
-        compileTask.setDescription("Generates web3j contract wrappers for $sourceSet.name source set.")
+
+        def outputDir = project.solidity.outputDir.absolutePath
+        compileTask.outputComponents = project.solidity.outputComponents
+        compileTask.overwrite = project.solidity.overwrite
+        compileTask.optimize = project.solidity.optimize
+        compileTask.optimizeRuns = project.solidity.optimizeRuns
+        compileTask.outputs.dir("$outputDir/$sourceSet.name/$NAME")
+        compileTask.description = "Generates web3j contract wrappers " +
+                "for $sourceSet.name source set."
     }
 
 }

@@ -9,6 +9,9 @@ import org.gradle.api.tasks.SourceSetContainer
 
 import javax.inject.Inject
 
+/**
+ * Gradle plugin for Solidity compile automation.
+ */
 class SolidityPlugin implements Plugin<Project> {
 
     private final SourceDirectorySetFactory sourceFactory
@@ -21,7 +24,8 @@ class SolidityPlugin implements Plugin<Project> {
     @Override
     void apply(final Project target) {
         target.pluginManager.apply(JavaPlugin.class)
-        target.extensions.create(SolidityPluginExtension.NAME, SolidityPluginExtension)
+        target.extensions.create(SolidityPluginExtension.NAME,
+                SolidityPluginExtension, target)
 
         final SourceSetContainer sourceSets = target.convention
                 .getPlugin(JavaPluginConvention.class).sourceSets

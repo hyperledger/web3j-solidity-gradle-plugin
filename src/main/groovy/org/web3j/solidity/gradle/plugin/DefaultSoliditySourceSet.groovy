@@ -7,7 +7,13 @@ import org.gradle.api.reflect.HasPublicType
 import org.gradle.api.reflect.TypeOf
 import org.gradle.util.ConfigureUtil
 
+/**
+ * SoliditySourceSet default implementation.
+ */
 class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
+
+    private final SourceDirectorySet solidity
+    private final SourceDirectorySet allSolidity
 
     DefaultSoliditySourceSet(
             final String displayName,
@@ -47,6 +53,4 @@ class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
         return TypeOf.typeOf(SoliditySourceSet.class)
     }
 
-    private final SourceDirectorySet solidity
-    private final SourceDirectorySet allSolidity
 }

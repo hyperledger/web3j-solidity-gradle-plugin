@@ -10,6 +10,16 @@ class CompileSolidityTask extends SourceTask {
 
     private final SourceSet sourceSet
 
+    private Boolean overwrite
+
+    private Boolean optimize
+
+    private Integer optimizeRuns
+
+    private Boolean prettyJson
+
+    private OutputComponent[] outputComponents
+
     @Inject
     CompileSolidityTask(final SourceSet sourceSet) {
         this.sourceSet = sourceSet
@@ -17,14 +27,80 @@ class CompileSolidityTask extends SourceTask {
 
     @TaskAction
     void compileSolidity() {
-        source.each { File contract ->
+        for (File contract in source) {
+            def options = []
+
+            for (output in outputComponents) {
+                options.add("--$output")
+            }
+
+            if (optimize) {
+                options.add('--optimize')
+
+                if (0 < optimizeRuns) {
+                    options.add('--optimize-runs')
+                    options.add(optimizeRuns)
+                }
+            }
+
+            if (overwrite) {
+                options.add('--overwrite')
+            }
+
+            if (prettyJson) {
+                options.add('--pretty-json')
+                options.add(options.add("--$OutputComponent.ASM_JSON"))
+            }
+
+            options.add('-o')
+            options.add(outputs.files.singleFile.absolutePath)
+            options.add(contract.absolutePath)
+
             project.exec {
                 executable = 'solc'
-                args = ['--bin', '--abi', '--optimize', '--overwrite',
-                        '-o', outputs.files.singleFile.absolutePath,
-                        contract.absolutePath]
+                args = options
             }
         }
+    }
+
+    Boolean getOverwrite() {
+        return overwrite
+    }
+
+    void setOverwrite(final Boolean overwrite) {
+        this.overwrite = overwrite
+    }
+
+    Boolean getOptimize() {
+        return optimize
+    }
+
+    void setOptimize(final Boolean optimize) {
+        this.optimize = optimize
+    }
+
+    Integer getOptimizeRuns() {
+        return optimizeRuns
+    }
+
+    void setOptimizeRuns(final Integer optimizeRuns) {
+        this.optimizeRuns = optimizeRuns
+    }
+
+    Boolean getPrettyJson() {
+        return prettyJson
+    }
+
+    void setPrettyJson(final Boolean prettyJson) {
+        this.prettyJson = prettyJson
+    }
+
+    OutputComponent[] getOutputComponents() {
+        return outputComponents
+    }
+
+    void setOutputComponents(final OutputComponent[] outputComponents) {
+        this.outputComponents = outputComponents
     }
 
 }
