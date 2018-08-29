@@ -1,10 +1,19 @@
 plugins {
-    id 'java'
-    id 'idea'
-    id 'groovy'
+    id 'com.jfrog.bintray' version '1.7.3'
     id 'java-gradle-plugin'
-    id 'maven'
+    id 'java'
+    id 'groovy'
+
+    // Required for JFrog Artifactory repository
+    id 'jacoco'
     id 'maven-publish'
+
+    // Required for Maven Nexus repository
+    id 'maven'
+    id 'signing'
+    id 'idea'
+    id 'com.bmuschko.nexus' version '2.3.1'
+    id 'io.codearte.nexus-staging' version '0.11.0'
 }
 
 group = 'org.web3j'
