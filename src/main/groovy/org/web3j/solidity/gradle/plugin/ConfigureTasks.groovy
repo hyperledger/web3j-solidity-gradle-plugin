@@ -15,11 +15,11 @@ import static org.web3j.solidity.gradle.plugin.SoliditySourceSet.NAME
  * is <code>compileSolidity</code> and for <code>test</code>
  * <code>compileTestSolidity</code>.
  */
-class CompileSolidityAction implements Action<SourceSet> {
+class ConfigureTasks implements Action<SourceSet> {
 
     private final Project project
 
-    CompileSolidityAction(final Project project) {
+    ConfigureTasks(final Project project) {
         this.project = project
     }
 
@@ -30,7 +30,7 @@ class CompileSolidityAction implements Action<SourceSet> {
                 '' : capitalize((CharSequence) sourceSet.name)
 
         def compileTask = project.tasks.create(
-                "compile" + srcSetName + "Solidity", CompileSolidityTask, sourceSet)
+                "compile" + srcSetName + "Solidity", CompileSolidity, sourceSet)
 
         def soliditySourceSet = sourceSet.convention.plugins[NAME] as SoliditySourceSet
 

@@ -8,7 +8,7 @@ import org.gradle.api.tasks.TaskAction
 
 import javax.inject.Inject
 
-class CompileSolidityTask extends SourceTask {
+class CompileSolidity extends SourceTask {
 
     private final SourceSet sourceSet
 
@@ -33,7 +33,7 @@ class CompileSolidityTask extends SourceTask {
     private OutputComponent[] outputComponents
 
     @Inject
-    CompileSolidityTask(final SourceSet sourceSet) {
+    CompileSolidity(final SourceSet sourceSet) {
         this.sourceSet = sourceSet
     }
 

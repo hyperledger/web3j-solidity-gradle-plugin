@@ -33,8 +33,7 @@ class SolidityPlugin implements Plugin<Project> {
         final SoliditySourceSetAction sourceSetAction =
                 new SoliditySourceSetAction(target, sourceFactory)
 
-        final CompileSolidityAction compileSolidity =
-                new CompileSolidityAction(target)
+        final ConfigureTasks compileSolidity = new ConfigureTasks(target)
 
         sourceSets.all(sourceSetAction)
 
