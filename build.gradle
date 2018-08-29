@@ -29,7 +29,6 @@ gradlePlugin {
             implementationClass = 'org.web3j.solidity.gradle.plugin.SolidityPlugin'
         }
     }
-    testSourceSets sourceSets.test
 }
 
 jacoco {
