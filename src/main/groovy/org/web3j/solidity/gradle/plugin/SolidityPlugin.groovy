@@ -24,8 +24,8 @@ class SolidityPlugin implements Plugin<Project> {
     @Override
     void apply(final Project target) {
         target.pluginManager.apply(JavaPlugin.class)
-        target.extensions.create(SolidityPluginExtension.NAME,
-                SolidityPluginExtension, target)
+        target.extensions.create(SolidityExtension.NAME,
+                SolidityExtension, target)
 
         final SourceSetContainer sourceSets = target.convention
                 .getPlugin(JavaPluginConvention.class).sourceSets

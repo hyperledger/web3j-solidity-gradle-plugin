@@ -7,7 +7,7 @@ import javax.inject.Inject
 /**
  * Extension for Solidity compilation options.
  */
-class SolidityPluginExtension {
+class SolidityExtension {
 
     static final NAME = 'solidity'
 
@@ -26,7 +26,7 @@ class SolidityPluginExtension {
     private OutputComponent[] outputComponents
 
     @Inject
-    SolidityPluginExtension(final Project project) {
+    SolidityExtension(final Project project) {
         this.project = project
         this.optimize = true
         this.overwrite = true
