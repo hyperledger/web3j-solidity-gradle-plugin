@@ -11,6 +11,8 @@ group = 'org.web3j'
 version = '0.1.0'
 description = 'Solidity Gradle Plugin'
 
+sourceCompatibility = 1.8
+
 gradlePlugin {
     plugins {
         solidity {
@@ -19,6 +21,16 @@ gradlePlugin {
         }
     }
     testSourceSets sourceSets.test
+}
+
+jacoco {
+    toolVersion = '0.8.1' // See http://www.eclemma.org/jacoco/.
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+    }
 }
 
 repositories {
@@ -36,6 +48,96 @@ publishing {
             groupId 'org.web3j'
             artifactId 'solidity-gradle-plugin'
             version version
+        }
+    }
+}
+
+tasks.withType(Test) {
+    reports.html.destination file("${reporting.baseDir}/${name}")
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId project.name
+            version project.version
+            artifact sourcesJar {
+                classifier 'sources'
+            }
+            artifact javadocJar {
+                classifier 'javadoc'
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ?
+            project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ?
+            project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    publications = ['mavenJava']
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = project.name
+        desc = project.description
+        userOrg = 'web3j'
+        licenses = ['Apache-2.0']
+        issueTrackerUrl = 'https://github.com/web3j/solidity-gradle-plugin/issues'
+        vcsUrl = 'https://github.com/web3j/solidity-gradle-plugin.git'
+        websiteUrl = 'http://web3j.io'
+        publicDownloadNumbers = true
+    }
+}
+
+task release {
+    dependsOn 'clean'
+    dependsOn 'build'
+    dependsOn 'uploadArchives'
+    dependsOn 'closeAndReleaseRepository'
+    dependsOn 'bintrayUpload'
+
+    tasks.findByName('build').mustRunAfter 'clean'
+    tasks.findByName('uploadArchives').mustRunAfter 'build'
+    tasks.findByName('closeAndReleaseRepository').mustRunAfter 'uploadArchives'
+    tasks.findByName('bintrayUpload').mustRunAfter 'build'
+}
+
+modifyPom {
+    project {
+        name project.description
+        description 'Gradle plugin providing tasks to compile Solidity contracts.'
+        url 'https://github.com/web3j/solidity-gradle-plugin'
+        inceptionYear '2018'
+
+        scm {
+            url 'https://github.com/web3j/solidity-gradle-plugin'
+            connection 'scm:https://github.com/web3j/solidity-gradle-plugin.git'
+            developerConnection 'scm:git://github.com/web3j/solidity-gradle-plugin.git'
+        }
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'conor10'
+                name 'Conor Svensson'
+                email 'conor10@gmail.com'
+            }
+            developer {
+                id 'xaviarias'
+                name 'Xavi Arias'
+                email 'xavi.arias.segui@gmail.com'
+            }
         }
     }
 }
