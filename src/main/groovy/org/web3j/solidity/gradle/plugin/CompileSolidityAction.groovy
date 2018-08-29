@@ -37,13 +37,12 @@ class CompileSolidityAction implements Action<SourceSet> {
         // Set the sources for the generation task
         compileTask.setSource(soliditySourceSet.solidity)
 
-        def outputDir = project.solidity.outputDir.absolutePath
         compileTask.outputComponents = project.solidity.outputComponents
         compileTask.overwrite = project.solidity.overwrite
         compileTask.optimize = project.solidity.optimize
         compileTask.optimizeRuns = project.solidity.optimizeRuns
         compileTask.prettyJson = project.solidity.prettyJson
-        compileTask.outputs.dir("$outputDir/$sourceSet.name/$NAME")
+        compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
         compileTask.description = "Generates web3j contract wrappers " +
                 "for $sourceSet.name source set."
     }

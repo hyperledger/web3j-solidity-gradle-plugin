@@ -26,16 +26,17 @@ class SoliditySourceSetAction implements Action<SourceSet> {
     @Override
     void execute(final SourceSet sourceSet) {
 
-        final String srcSetName = capitalize((CharSequence) sourceSet.name)
-        final DefaultSoliditySourceSet soliditySourceSet =
-                new DefaultSoliditySourceSet(srcSetName, sourceFactory)
+        def srcSetName = capitalize((CharSequence) sourceSet.name)
+        def soliditySourceSet = new DefaultSoliditySourceSet(srcSetName, sourceFactory)
 
         sourceSet.convention.plugins.put(NAME, soliditySourceSet)
 
-        final File defaultSrcDir = new File(project.projectDir,
-                "src/" + sourceSet.name + "/" + NAME)
+        def defaultSrcDir = new File(project.projectDir, "src/$sourceSet.name/$NAME")
+        def defaultOutputDir = new File(project.buildDir, "resources/$sourceSet.name/$NAME")
 
         soliditySourceSet.solidity.srcDir(defaultSrcDir)
+        soliditySourceSet.solidity.outputDir = defaultOutputDir
+
         sourceSet.allJava.source(soliditySourceSet.solidity)
         sourceSet.allSource.source(soliditySourceSet.solidity)
     }

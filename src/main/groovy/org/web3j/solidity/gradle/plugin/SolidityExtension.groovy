@@ -21,8 +21,6 @@ class SolidityExtension {
 
     private Boolean prettyJson
 
-    private File outputDir
-
     private OutputComponent[] outputComponents
 
     @Inject
@@ -32,7 +30,6 @@ class SolidityExtension {
         this.overwrite = true
         this.prettyJson = false
         this.optimizeRuns = 0
-        this.outputDir = new File("$project.buildDir/resources")
         this.outputComponents = [OutputComponent.BIN, OutputComponent.ABI]
     }
 
@@ -58,14 +55,6 @@ class SolidityExtension {
 
     void setPrettyJson(final boolean prettyJson) {
         this.prettyJson = prettyJson
-    }
-
-    File getOutputDir() {
-        return outputDir
-    }
-
-    void setOutputDir(final File outputDir) {
-        this.outputDir = outputDir
     }
 
     boolean getOverwrite() {
