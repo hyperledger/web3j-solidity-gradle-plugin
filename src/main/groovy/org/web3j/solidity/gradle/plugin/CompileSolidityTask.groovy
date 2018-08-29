@@ -1,6 +1,7 @@
 package org.web3j.solidity.gradle.plugin
 
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
@@ -12,18 +13,23 @@ class CompileSolidityTask extends SourceTask {
     private final SourceSet sourceSet
 
     @Input
+    @Optional
     private Boolean overwrite
 
     @Input
+    @Optional
     private Boolean optimize
 
     @Input
+    @Optional
     private Integer optimizeRuns
 
     @Input
+    @Optional
     private Boolean prettyJson
 
     @Input
+    @Optional
     private OutputComponent[] outputComponents
 
     @Inject
