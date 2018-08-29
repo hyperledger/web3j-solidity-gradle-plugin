@@ -42,6 +42,7 @@ class CompileSolidityAction implements Action<SourceSet> {
         compileTask.overwrite = project.solidity.overwrite
         compileTask.optimize = project.solidity.optimize
         compileTask.optimizeRuns = project.solidity.optimizeRuns
+        compileTask.prettyJson = project.solidity.prettyJson
         compileTask.outputs.dir("$outputDir/$sourceSet.name/$NAME")
         compileTask.description = "Generates web3j contract wrappers " +
                 "for $sourceSet.name source set."
