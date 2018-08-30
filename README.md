@@ -57,7 +57,7 @@ pluginManagement {
 Then run this command from your project containing Solidity contracts:
 
 ```
-./gradlew compileSolidity
+./gradlew build
 ```
 
 After the task execution, the base directory for compiled code (by default 
@@ -117,5 +117,5 @@ source set, and a `compile[SourceSet]Solidity` for each remaining source set (e.
 To obtain a list and description of all added tasks, run the command:
 
 ```
-../gradlew tasks --all
+./gradlew tasks --all
 ```
