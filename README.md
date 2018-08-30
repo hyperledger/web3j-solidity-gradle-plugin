@@ -78,13 +78,13 @@ solidity {
 
 The properties accepted by the DSL are listed in the following table:
 
-|  Name                   | Type               | Default value    | Description                 |
-|-------------------------|:------------------:|:----------------:|-----------------------------|
-| `Boolean`               | `overwrite`        | `true`           | Overwrite existing files.   |
-| `Boolean`               | `optimize`         | `true`           | Enable byte code optimizer. |
-| `Integer`               | `optimizeRuns`     | `200`            | Set for how many contract runs to optimize. |
-| `Boolean`               | `prettyJson`       | `false`          | Output JSON in pretty format. Enables the combined JSON output. |
-| `OutputComponent[]`     | `outputComponents` | `[BIN, ABI]`     | List of output components to produce. |
+|  Name              | Type                | Default value    | Description                 |
+|--------------------|:-------------------:|:----------------:|-----------------------------|
+| `overwrite`        | `Boolean`           | `true`           | Overwrite existing files.   |
+| `optimize`         | `Boolean`           | `true`           | Enable byte code optimizer. |
+| `optimizeRuns`     | `Integer`           | `200`            | Set for how many contract runs to optimize. |
+| `prettyJson`       | `Boolean`           | `false`          | Output JSON in pretty format. Enables the combined JSON output. |
+| `outputComponents` | `OutputComponent[]` | `[BIN, ABI]`     | List of output components to produce. |
 
 ## Source sets
 
