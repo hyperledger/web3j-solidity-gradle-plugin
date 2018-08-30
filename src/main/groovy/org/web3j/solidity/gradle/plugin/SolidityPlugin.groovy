@@ -90,6 +90,8 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
         compileTask.description = "Generates web3j contract wrappers " +
                 "for $sourceSet.name source set."
+
+        project.getTasks().getByName('build') dependsOn(compileTask)
     }
 
 }

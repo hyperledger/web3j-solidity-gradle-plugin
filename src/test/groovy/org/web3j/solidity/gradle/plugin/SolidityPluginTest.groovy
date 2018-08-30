@@ -58,7 +58,7 @@ class SolidityPluginTest {
     void compileSolidity() {
         def compileSolidity = GradleRunner.create()
                 .withProjectDir(testProjectDir.getRoot())
-                .withArguments("compileSolidity")
+                .withArguments("build")
                 .forwardOutput()
                 .withDebug(true)
 
