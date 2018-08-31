@@ -2,15 +2,10 @@ package org.web3j.solidity.gradle.plugin
 
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 
-import javax.inject.Inject
-
 class CompileSolidity extends SourceTask {
-
-    private final SourceSet sourceSet
 
     @Input
     @Optional
@@ -32,10 +27,6 @@ class CompileSolidity extends SourceTask {
     @Optional
     private OutputComponent[] outputComponents
 
-    @Inject
-    CompileSolidity(final SourceSet sourceSet) {
-        this.sourceSet = sourceSet
-    }
 
     @TaskAction
     void compileSolidity() {

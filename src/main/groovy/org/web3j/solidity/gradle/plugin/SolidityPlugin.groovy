@@ -34,10 +34,14 @@ class SolidityPlugin implements Plugin<Project> {
         final SourceSetContainer sourceSets = target.convention
                 .getPlugin(JavaPluginConvention.class).sourceSets
 
-        sourceSets.all { configureSourceSet(target, it) }
+        sourceSets.all { SourceSet sourceSet ->
+            configureSourceSet(target, sourceSet)
+        }
 
         target.afterEvaluate {
-            sourceSets.all { configureTask(target, it) }
+            sourceSets.all { SourceSet sourceSet ->
+                configureTask(target, sourceSet)
+            }
         }
     }
 
@@ -69,13 +73,13 @@ class SolidityPlugin implements Plugin<Project> {
      * is <code>compileSolidity</code> and for <code>test</code>
      * <code>compileTestSolidity</code>.
      */
-    private void configureTask(final Project project, final SourceSet sourceSet) {
+    private static void configureTask(final Project project, final SourceSet sourceSet) {
 
         def srcSetName = sourceSet.name == 'main' ?
                 '' : capitalize((CharSequence) sourceSet.name)
 
         def compileTask = project.tasks.create(
-                "compile" + srcSetName + "Solidity", CompileSolidity, sourceSet)
+                "compile" + srcSetName + "Solidity", CompileSolidity)
 
         def soliditySourceSet = sourceSet.convention.plugins[NAME] as SoliditySourceSet
 
