@@ -39,7 +39,6 @@ class SolidityPluginTest {
             }
             repositories {
                 mavenCentral()
-                mavenLocal()
             }
         """
 
@@ -48,7 +47,6 @@ class SolidityPluginTest {
             pluginManagement {
                 repositories {
                     mavenCentral()
-                    mavenLocal()
                 }
             }
         """
