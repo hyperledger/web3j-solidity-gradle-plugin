@@ -67,7 +67,7 @@ After the task execution, the base directory for compiled code (by default
 
 ## Code generation
 
-The `web3j` DSL allows to configure the generated code, e.g.:
+The `solidity` DSL allows to configure the generated code, e.g.:
 
 ```groovy
 solidity {
