@@ -65,10 +65,6 @@ task sourcesJar(type: Jar) {
 }
 
 def pomConfig = {
-    name project.description
-    description 'Gradle plugin providing tasks to compile Solidity contracts.'
-    url 'https://github.com/web3j/solidity-gradle-plugin'
-    inceptionYear '2018'
     scm {
         url 'https://github.com/web3j/solidity-gradle-plugin'
         connection 'scm:https://github.com/web3j/solidity-gradle-plugin.git'
@@ -105,7 +101,11 @@ publishing {
             artifact sourcesJar
             artifact javadocJar
             pom.withXml {
-                pomConfig
+                def root = asNode()
+                root.appendNode('name', project.description)
+                root.appendNode('description', 'Gradle plugin providing tasks to compile Solidity contracts.')
+                root.appendNode('url', 'https://github.com/web3j/solidity-gradle-plugin')
+                root.children().last() + pomConfig
             }
         }
     }
