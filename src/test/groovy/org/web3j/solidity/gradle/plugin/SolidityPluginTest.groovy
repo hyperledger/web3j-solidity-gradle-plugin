@@ -26,7 +26,7 @@ class SolidityPluginTest {
         def buildFile = testProjectDir.newFile("build.gradle")
         buildFile << """
             plugins {
-               id 'solidity' version '0.1.0'
+               id 'solidity'
             }
             sourceSets {
                main {
@@ -57,8 +57,8 @@ class SolidityPluginTest {
         def compileSolidity = GradleRunner.create()
                 .withProjectDir(testProjectDir.getRoot())
                 .withArguments("build")
+                .withPluginClasspath()
                 .forwardOutput()
-                .withDebug(true)
 
         def success = compileSolidity.build()
         assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
