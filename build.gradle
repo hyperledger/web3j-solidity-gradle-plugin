@@ -1,6 +1,7 @@
 plugins {
+    id "com.gradle.plugin-publish" version "0.10.0"
+    id "java-gradle-plugin"
     id 'com.jfrog.bintray' version '1.8.4'
-    id 'java-gradle-plugin'
     id 'java'
     id 'groovy'
 
@@ -22,8 +23,21 @@ sourceCompatibility = 1.8
 gradlePlugin {
     plugins {
         solidity {
-            id = 'solidity'
+            id = 'org.web3j.solidity'
             implementationClass = 'org.web3j.solidity.gradle.plugin.SolidityPlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://web3j.io/'
+    vcsUrl = 'https://github.com/web3j/solidity-gradle-plugin'
+    description = 'Gradle plugin providing tasks to compile Solidity contracts.'
+    tags = ['solidity', 'ethereum']
+    plugins {
+        solidity {
+            // id is captured from java-gradle-plugin configuration
+            displayName = project.description
         }
     }
 }

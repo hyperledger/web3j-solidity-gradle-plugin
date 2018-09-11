@@ -26,7 +26,7 @@ class SolidityPluginTest {
         def buildFile = testProjectDir.newFile("build.gradle")
         buildFile << """
             plugins {
-               id 'solidity'
+               id 'org.web3j.solidity'
             }
             sourceSets {
                main {
