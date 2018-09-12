@@ -5,7 +5,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 
-class CompileSolidity extends SourceTask {
+class SolidityCompile extends SourceTask {
 
     @Input
     @Optional

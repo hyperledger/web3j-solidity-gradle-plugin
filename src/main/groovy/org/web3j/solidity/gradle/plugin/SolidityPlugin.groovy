@@ -79,7 +79,7 @@ class SolidityPlugin implements Plugin<Project> {
                 '' : capitalize((CharSequence) sourceSet.name)
 
         def compileTask = project.tasks.create(
-                "compile" + srcSetName + "Solidity", CompileSolidity)
+                "compile" + srcSetName + "Solidity", SolidityCompile)
 
         def soliditySourceSet = sourceSet.convention.plugins[NAME] as SoliditySourceSet
 
