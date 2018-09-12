@@ -16,7 +16,7 @@ plugins {
 }
 
 group = 'org.web3j'
-version = '0.1.0'
+version = '0.1.1'
 description = 'Solidity Gradle Plugin'
 sourceCompatibility = 1.8
 

@@ -8,8 +8,7 @@ import org.junit.rules.TemporaryFolder
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
+import static org.junit.Assert.*
 
 class SolidityPluginTest {
 
@@ -31,9 +30,8 @@ class SolidityPluginTest {
             sourceSets {
                main {
                    solidity {
-                       srcDir {
-                           '$sourceDir.absolutePath'
-                       }
+                       srcDir '$sourceDir.absolutePath'
+                       exclude 'common/**'
                    }
                }
             }
@@ -71,6 +69,9 @@ class SolidityPluginTest {
 
         def compiledBin = new File(compiledSolDir, "EIP20.bin")
         assertTrue(compiledBin.exists())
+
+        def excludedAbi = new File(compiledSolDir, "Ownable.abi")
+        assertFalse(excludedAbi.exists())
 
         def upToDate = compileSolidity.build()
         assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
