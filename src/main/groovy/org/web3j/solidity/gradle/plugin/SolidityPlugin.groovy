@@ -92,7 +92,7 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.optimizeRuns = project.solidity.optimizeRuns
         compileTask.prettyJson = project.solidity.prettyJson
         compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
-        compileTask.description = "Generates web3j contract wrappers " +
+        compileTask.description = "Compiles Solidity contracts " +
                 "for $sourceSet.name source set."
 
         project.getTasks().getByName('build') dependsOn(compileTask)
