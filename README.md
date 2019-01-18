@@ -22,7 +22,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.web3j:solidity-gradle-plugin:0.1.0'
+        classpath 'org.web3j:solidity-gradle-plugin:0.1.2'
     }
 }
 
@@ -36,7 +36,7 @@ build file:
 
 ```groovy
 plugins {
-    id 'solidity' version '0.1.0'
+    id 'solidity' version '0.1.2'
 }
 ```
 
