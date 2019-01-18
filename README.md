@@ -4,8 +4,6 @@ Solidity Gradle Plugin
 Simple Gradle plugin used by the [web3j plugin](https://github.com/web3j/web3j-gradle-plugin) 
 to compile Solidity contracts, but it can be used in any standalone project for this purpose.
 
-This plugin is under development and not stable.
-
 ## Plugin configuration
 
 Before you start, you will need to install the 
