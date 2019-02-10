@@ -83,7 +83,7 @@ The properties accepted by the DSL are listed in the following table:
 | `optimizeRuns`     | `Integer`           | `200`            | Set for how many contract runs to optimize. |
 | `prettyJson`       | `Boolean`           | `false`          | Output JSON in pretty format. Enables the combined JSON output. |
 | `ignoreMissing`    | `Boolean`           | `false`          | Ignore missing files. |
-| `allowPaths`       | `List<String>`      | `[]`             | Allow a given path for imports. A list of paths can be supplied by separating them with a comma. |
+| `allowPaths`       | `List<String>`      | `[]`             | Allow a given path for imports. |
 | `evmVersion`       | `EVMVersion`        | `BYZANTIUM`      | Select desired EVM version. |
 | `outputComponents` | `OutputComponent[]` | `[BIN, ABI]`     | List of output components to produce. |
 
