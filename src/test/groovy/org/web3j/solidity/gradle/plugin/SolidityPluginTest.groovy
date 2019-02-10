@@ -24,6 +24,7 @@ class SolidityPluginTest {
 
         def buildFile = testProjectDir.newFile("build.gradle")
         buildFile << """
+            import org.web3j.solidity.gradle.plugin.EVMVersion
             plugins {
                id 'org.web3j.solidity'
             }
@@ -34,6 +35,10 @@ class SolidityPluginTest {
                        exclude 'common/**'
                    }
                }
+            }
+            solidity {
+                evmVersion = EVMVersion.CONSTANTINOPLE
+                allowPaths = ['$sourceDir.absolutePath']
             }
             repositories {
                 mavenCentral()

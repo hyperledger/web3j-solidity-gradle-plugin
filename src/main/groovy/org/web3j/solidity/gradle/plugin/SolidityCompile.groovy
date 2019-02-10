@@ -25,8 +25,19 @@ class SolidityCompile extends SourceTask {
 
     @Input
     @Optional
-    private OutputComponent[] outputComponents
+    private Boolean ignoreMissing
 
+    @Input
+    @Optional
+    private List<String> allowPaths
+
+    @Input
+    @Optional
+    private EVMVersion evmVersion
+
+    @Input
+    @Optional
+    private OutputComponent[] outputComponents
 
     @TaskAction
     void compileSolidity() {
@@ -55,7 +66,21 @@ class SolidityCompile extends SourceTask {
                 options.add(options.add("--$OutputComponent.ASM_JSON"))
             }
 
-            options.add('-o')
+            if (ignoreMissing) {
+                options.add('--ignore-missing')
+            }
+
+            if (!allowPaths.isEmpty()) {
+                options.add("--allow-paths")
+                options.add(allowPaths.join(','))
+            }
+
+            if (evmVersion != null) {
+                options.add("--evm-version")
+                options.add(evmVersion.value)
+            }
+
+            options.add('--output-dir')
             options.add(outputs.files.singleFile.absolutePath)
             options.add(contract.absolutePath)
 
@@ -96,6 +121,30 @@ class SolidityCompile extends SourceTask {
 
     void setPrettyJson(final Boolean prettyJson) {
         this.prettyJson = prettyJson
+    }
+
+    Boolean getIgnoreMissing() {
+        return ignoreMissing
+    }
+
+    void setIgnoreMissing(final Boolean ignoreMissing) {
+        this.ignoreMissing = ignoreMissing
+    }
+
+    List<String> getAllowPaths() {
+        return allowPaths
+    }
+
+    void setAllowPaths(final List<String> allowPaths) {
+        this.allowPaths = allowPaths
+    }
+
+    EVMVersion getEvmVersion() {
+        return evmVersion
+    }
+
+    void setEvmVersion(final EVMVersion evmVersion) {
+        this.evmVersion = evmVersion
     }
 
     OutputComponent[] getOutputComponents() {

@@ -22,7 +22,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.web3j:solidity-gradle-plugin:0.1.2'
+        classpath 'org.web3j:solidity-gradle-plugin:0.1.3'
     }
 }
 
@@ -36,7 +36,7 @@ build file:
 
 ```groovy
 plugins {
-    id 'solidity' version '0.1.2'
+    id 'solidity' version '0.1.3'
 }
 ```
 
@@ -82,6 +82,9 @@ The properties accepted by the DSL are listed in the following table:
 | `optimize`         | `Boolean`           | `true`           | Enable byte code optimizer. |
 | `optimizeRuns`     | `Integer`           | `200`            | Set for how many contract runs to optimize. |
 | `prettyJson`       | `Boolean`           | `false`          | Output JSON in pretty format. Enables the combined JSON output. |
+| `ignoreMissing`    | `Boolean`           | `false`          | Ignore missing files. |
+| `allowPaths`       | `List<String>`      | `[]`             | Allow a given path for imports. A list of paths can be supplied by separating them with a comma. |
+| `evmVersion`       | `EVMVersion`        | `BYZANTIUM`      | Select desired EVM version. |
 | `outputComponents` | `OutputComponent[]` | `[BIN, ABI]`     | List of output components to produce. |
 
 ## Source sets

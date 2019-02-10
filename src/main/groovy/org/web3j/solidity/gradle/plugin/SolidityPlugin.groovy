@@ -91,6 +91,9 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.optimize = project.solidity.optimize
         compileTask.optimizeRuns = project.solidity.optimizeRuns
         compileTask.prettyJson = project.solidity.prettyJson
+        compileTask.evmVersion = project.solidity.evmVersion
+        compileTask.allowPaths = project.solidity.allowPaths
+        compileTask.ignoreMissing = project.solidity.ignoreMissing
         compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
         compileTask.description = "Compiles Solidity contracts " +
                 "for $sourceSet.name source set."

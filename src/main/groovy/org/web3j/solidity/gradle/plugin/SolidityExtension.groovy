@@ -4,6 +4,10 @@ import org.gradle.api.Project
 
 import javax.inject.Inject
 
+import static EVMVersion.BYZANTIUM
+import static org.web3j.solidity.gradle.plugin.OutputComponent.ABI
+import static org.web3j.solidity.gradle.plugin.OutputComponent.BIN
+
 /**
  * Extension for Solidity compilation options.
  */
@@ -21,6 +25,12 @@ class SolidityExtension {
 
     private Boolean prettyJson
 
+    private Boolean ignoreMissing
+
+    private List<String> allowPaths
+
+    private EVMVersion evmVersion
+
     private OutputComponent[] outputComponents
 
     @Inject
@@ -28,9 +38,12 @@ class SolidityExtension {
         this.project = project
         this.optimize = true
         this.overwrite = true
-        this.prettyJson = false
         this.optimizeRuns = 0
-        this.outputComponents = [OutputComponent.BIN, OutputComponent.ABI]
+        this.prettyJson = false
+        this.ignoreMissing = false
+        this.allowPaths = []
+        this.evmVersion = BYZANTIUM
+        this.outputComponents = [BIN, ABI]
     }
 
     boolean getOptimize() {
@@ -63,6 +76,30 @@ class SolidityExtension {
 
     void setOverwrite(final boolean overwrite) {
         this.overwrite = overwrite
+    }
+
+    Boolean getIgnoreMissing() {
+        return ignoreMissing
+    }
+
+    void setIgnoreMissing(final Boolean ignoreMissing) {
+        this.ignoreMissing = ignoreMissing
+    }
+
+    List<String> getAllowPaths() {
+        return allowPaths
+    }
+
+    void setAllowPaths(final List<String> allowPaths) {
+        this.allowPaths = allowPaths
+    }
+
+    EVMVersion getEvmVersion() {
+        return evmVersion
+    }
+
+    void setEvmVersion(final EVMVersion evmVersion) {
+        this.evmVersion = evmVersion
     }
 
     OutputComponent[] getOutputComponents() {
