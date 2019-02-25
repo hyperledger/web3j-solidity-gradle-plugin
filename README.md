@@ -76,16 +76,18 @@ solidity {
 
 The properties accepted by the DSL are listed in the following table:
 
-|  Name              | Type                | Default value    | Description                 |
-|--------------------|:-------------------:|:----------------:|-----------------------------|
-| `overwrite`        | `Boolean`           | `true`           | Overwrite existing files.   |
-| `optimize`         | `Boolean`           | `true`           | Enable byte code optimizer. |
-| `optimizeRuns`     | `Integer`           | `200`            | Set for how many contract runs to optimize. |
-| `prettyJson`       | `Boolean`           | `false`          | Output JSON in pretty format. Enables the combined JSON output. |
-| `ignoreMissing`    | `Boolean`           | `false`          | Ignore missing files. |
-| `allowPaths`       | `List<String>`      | `[]`             | Allow a given path for imports. |
-| `evmVersion`       | `EVMVersion`        | `BYZANTIUM`      | Select desired EVM version. |
-| `outputComponents` | `OutputComponent[]` | `[BIN, ABI]`     | List of output components to produce. |
+|  Name              | Type                | Default value                            | Description                 |
+|--------------------|:-------------------:|:----------------------------------------:|-----------------------------|
+| `overwrite`        | `Boolean`           | `true`                                   | Overwrite existing files.   |
+| `optimize`         | `Boolean`           | `true`                                   | Enable byte code optimizer. |
+| `optimizeRuns`     | `Integer`           | `200`                                    | Set for how many contract runs to optimize. |
+| `prettyJson`       | `Boolean`           | `false`                                  | Output JSON in pretty format. Enables the combined JSON output. |
+| `ignoreMissing`    | `Boolean`           | `false`                                  | Ignore missing files. |
+| `allowPaths`       | `List<String>`      | `[$projectDir/src/<name>/solidity, ...]` | Allow a given path for imports. |
+| `evmVersion`       | `EVMVersion`        | `BYZANTIUM`                              | Select desired EVM version. |
+| `outputComponents` | `OutputComponent[]` | `[BIN, ABI]`                             | List of output components to produce. |
+
+**Note:** The `allowPaths` property contains all project's Solidity source sets by default.
 
 ## Source sets
 
