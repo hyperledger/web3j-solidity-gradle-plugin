@@ -44,15 +44,6 @@ class SolidityPluginTest {
                 mavenCentral()
             }
         """
-
-        def settingsFile = testProjectDir.newFile("settings.gradle")
-        settingsFile << """
-            pluginManagement {
-                repositories {
-                    mavenCentral()
-                }
-            }
-        """
     }
 
     @Test

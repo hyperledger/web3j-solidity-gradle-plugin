@@ -41,6 +41,7 @@ class SolidityPlugin implements Plugin<Project> {
         target.afterEvaluate {
             sourceSets.all { SourceSet sourceSet ->
                 configureTask(target, sourceSet)
+                configureAllowPath(target, sourceSet)
             }
         }
     }
@@ -99,6 +100,11 @@ class SolidityPlugin implements Plugin<Project> {
                 "for $sourceSet.name source set."
 
         project.getTasks().getByName('build') dependsOn(compileTask)
+    }
+
+    private static void configureAllowPath(final Project project, final SourceSet sourceSet) {
+        def allowPath = "$project.projectDir/src/$sourceSet.name/$NAME"
+        project.solidity.allowPaths.add(allowPath)
     }
 
 }
