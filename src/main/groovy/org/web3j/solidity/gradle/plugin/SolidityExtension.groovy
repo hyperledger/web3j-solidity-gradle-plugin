@@ -17,6 +17,10 @@ class SolidityExtension {
 
     private Project project
 
+    private String version
+
+    private String executable
+
     private Boolean overwrite
 
     private Boolean optimize
@@ -36,6 +40,8 @@ class SolidityExtension {
     @Inject
     SolidityExtension(final Project project) {
         this.project = project
+        this.version = SolcVersion.v0_4_25.value
+        this.executable = null
         this.optimize = true
         this.overwrite = true
         this.optimizeRuns = 0
@@ -44,6 +50,22 @@ class SolidityExtension {
         this.allowPaths = []
         this.evmVersion = BYZANTIUM
         this.outputComponents = [BIN, ABI]
+    }
+
+    String getVersion() {
+        return version
+    }
+
+    void setVersion(final String version) {
+        this.version = version
+    }
+
+    String getExecutable() {
+        return executable
+    }
+
+    void setExecutable(final String executable) {
+        this.executable = executable
     }
 
     boolean getOptimize() {

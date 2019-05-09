@@ -16,7 +16,7 @@ plugins {
 }
 
 group = 'org.web3j'
-version = '0.1.5'
+version = '0.1.5-SNAPSHOT'
 description = 'Solidity Gradle Plugin'
 sourceCompatibility = 1.8
 
@@ -62,7 +62,7 @@ ext {
 repositories {
     mavenCentral()
     maven {
-        url "https://dl.bintray.com/ethereum/maven"
+        url 'https://dl.bintray.com/ethereum/maven'
     }
 }
 
@@ -177,3 +177,4 @@ task release {
     tasks.findByName('bintrayUpload').mustRunAfter 'build'
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8
