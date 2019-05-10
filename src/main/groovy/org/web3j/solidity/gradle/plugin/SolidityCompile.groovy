@@ -91,8 +91,8 @@ class SolidityCompile extends SourceTask {
             }
 
             options.add('--output-dir')
-            options.add(outputs.files.singleFile.absolutePath)
-            options.add(contract.absolutePath)
+            options.add(project.projectDir.relativePath(outputs.files.singleFile))
+            options.add(project.projectDir.relativePath(contract))
 
             def executableParts = executable.split(' ')
             options.addAll(0, executableParts.drop(1))
