@@ -109,7 +109,7 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.allowPaths = project.solidity.allowPaths
         compileTask.ignoreMissing = project.solidity.ignoreMissing
         compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
-        compileTask.description = "Compiles Solidity contracts for $sourceSet.name source set."
+        compileTask.description = "Compiles $sourceSet.name.to Solidity source."
 
         project.getTasks().getByName('build') dependsOn(compileTask)
     }
