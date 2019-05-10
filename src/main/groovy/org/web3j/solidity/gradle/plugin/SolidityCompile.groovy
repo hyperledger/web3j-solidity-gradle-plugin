@@ -1,10 +1,8 @@
 package org.web3j.solidity.gradle.plugin
 
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 
+@CacheableTask
 class SolidityCompile extends SourceTask {
 
     @Input
