@@ -1,9 +1,12 @@
 package org.web3j.solidity.gradle.plugin
 
+import groovy.transform.CompileStatic
+
 /**
  * SolcJ available versions as per
  * https://bintray.com/ethereum/maven/org.ethereum.solcJ-all/.
  */
+@CompileStatic
 enum SolcVersion {
     v0_5_7('0.5.7'),
     v0_5_6('0.5.6'),

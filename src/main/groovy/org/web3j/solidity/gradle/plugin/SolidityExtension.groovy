@@ -1,5 +1,6 @@
 package org.web3j.solidity.gradle.plugin
 
+import groovy.transform.CompileStatic
 import org.gradle.api.Project
 
 import javax.inject.Inject
@@ -11,6 +12,7 @@ import static org.web3j.solidity.gradle.plugin.OutputComponent.BIN
 /**
  * Extension for Solidity compilation options.
  */
+@CompileStatic
 class SolidityExtension {
 
     static final NAME = 'solidity'

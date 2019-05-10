@@ -1,5 +1,6 @@
 package org.web3j.solidity.gradle.plugin
 
+import groovy.transform.CompileStatic
 import org.gradle.internal.os.OperatingSystem
 
 import java.nio.file.Files
@@ -9,6 +10,7 @@ import java.nio.file.StandardCopyOption
  * Based on EthereumJ bundled Solidity compiler at
  * https://github.com/ethereum/ethereumj/blob/develop/ethereumj-core/src/main/java/org/ethereum/solidity/compiler/Solc.java
  */
+@CompileStatic
 class SolidityCompiler {
 
     private File solc = null
