@@ -6,10 +6,6 @@ to compile Solidity contracts, but it can be used in any standalone project for 
 
 ## Plugin configuration
 
-Before you start, you will need to install the 
-[Solidity compiler](https://solidity.readthedocs.io/en/latest/installing-solidity.html)
-if is not already installed in your computer.
-
 ### Using the `buildscript` convention
 
 To install the Solidity Plugin using the old Gradle `buildscript` convention, you should add 
@@ -22,7 +18,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.web3j:solidity-gradle-plugin:0.1.4'
+        classpath 'org.web3j:solidity-gradle-plugin:0.1.5'
     }
 }
 
@@ -36,7 +32,7 @@ build file:
 
 ```groovy
 plugins {
-    id 'solidity' version '0.1.4'
+    id 'solidity' version '0.1.5'
 }
 ```
 
@@ -78,16 +74,29 @@ The properties accepted by the DSL are listed in the following table:
 
 |  Name              | Type                | Default value                            | Description                 |
 |--------------------|:-------------------:|:----------------------------------------:|-----------------------------|
+| `executable`       | `String`            | `null` (bundled with the plugin)         | Solidity compiler path.     |
+| `version`          | `String`            | `0.4.25`                                 | Solidity compiler version.  |
 | `overwrite`        | `Boolean`           | `true`                                   | Overwrite existing files.   |
 | `optimize`         | `Boolean`           | `true`                                   | Enable byte code optimizer. |
 | `optimizeRuns`     | `Integer`           | `200`                                    | Set for how many contract runs to optimize. |
 | `prettyJson`       | `Boolean`           | `false`                                  | Output JSON in pretty format. Enables the combined JSON output. |
 | `ignoreMissing`    | `Boolean`           | `false`                                  | Ignore missing files. |
-| `allowPaths`       | `List<String>`      | `[$projectDir/src/<name>/solidity, ...]` | Allow a given path for imports. |
+| `allowPaths`       | `List<String>`      | `['src/main/solidity', 'src/test/solidity', ...]` | Allow a given path for imports. |
 | `evmVersion`       | `EVMVersion`        | `BYZANTIUM`                              | Select desired EVM version. |
 | `outputComponents` | `OutputComponent[]` | `[BIN, ABI]`                             | List of output components to produce. |
 
-**Note:** The `allowPaths` property contains all project's Solidity source sets by default.
+**Notes:** 
+  - Setting the `executable` property will disable the bundled `solc` and use your local or containerized executable:
+  ```groovy
+    solidity {
+        executable = "docker run --rm -v $projectDir:/src satran004/aion-fastvm:latest solc"
+        version = '0.4.15'
+    }
+  ```
+  - Use `version` to change the bundled Solidity version. 
+    Check the [SolJ distributions](https://bintray.com/ethereum/maven/org.ethereum.solcJ-all/) 
+    for all available versions.
+  - `allowPaths` contains all project's Solidity source sets by default.
 
 ## Source sets
 
@@ -102,7 +111,7 @@ sourceSets {
             srcDir {
                 "my/custom/path/to/solidity"
              }
-             outputDir = file('out/bin/compiledSol') 
+             output.resourcesDir = file('out/bin/compiledSol') 
         }
     }
 }
