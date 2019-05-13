@@ -1,5 +1,6 @@
 package org.web3j.solidity.gradle.plugin
 
+import groovy.transform.CompileStatic
 import org.gradle.api.Project
 
 import javax.inject.Inject
@@ -11,11 +12,16 @@ import static org.web3j.solidity.gradle.plugin.OutputComponent.BIN
 /**
  * Extension for Solidity compilation options.
  */
+@CompileStatic
 class SolidityExtension {
 
     static final NAME = 'solidity'
 
     private Project project
+
+    private String version
+
+    private String executable
 
     private Boolean overwrite
 
@@ -36,6 +42,8 @@ class SolidityExtension {
     @Inject
     SolidityExtension(final Project project) {
         this.project = project
+        this.version = SolcVersion.v0_4_25.value
+        this.executable = null
         this.optimize = true
         this.overwrite = true
         this.optimizeRuns = 0
@@ -44,6 +52,22 @@ class SolidityExtension {
         this.allowPaths = []
         this.evmVersion = BYZANTIUM
         this.outputComponents = [BIN, ABI]
+    }
+
+    String getVersion() {
+        return version
+    }
+
+    void setVersion(final String version) {
+        this.version = version
+    }
+
+    String getExecutable() {
+        return executable
+    }
+
+    void setExecutable(final String executable) {
+        this.executable = executable
     }
 
     boolean getOptimize() {

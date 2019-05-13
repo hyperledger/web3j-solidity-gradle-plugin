@@ -1,11 +1,17 @@
 package org.web3j.solidity.gradle.plugin
 
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 
+@CacheableTask
 class SolidityCompile extends SourceTask {
+
+    @Input
+    @Optional
+    private String executable
+
+    @Input
+    @Optional
+    private String version
 
     @Input
     @Optional
@@ -41,7 +47,7 @@ class SolidityCompile extends SourceTask {
 
     @TaskAction
     void compileSolidity() {
-        for (File contract in source) {
+        for (def contract in source) {
             def options = []
 
             for (output in outputComponents) {
@@ -75,20 +81,47 @@ class SolidityCompile extends SourceTask {
                 options.add(allowPaths.join(','))
             }
 
-            if (evmVersion != null) {
-                options.add("--evm-version")
-                options.add(evmVersion.value)
+            if (supportsEvmVersionOption()) {
+                if (evmVersion != null) {
+                    options.add("--evm-version")
+                    options.add(evmVersion.value)
+                }
             }
 
             options.add('--output-dir')
-            options.add(outputs.files.singleFile.absolutePath)
-            options.add(contract.absolutePath)
+            options.add(project.projectDir.relativePath(outputs.files.singleFile))
+            options.add(project.projectDir.relativePath(contract))
+
+            def executableParts = executable.split(' ')
+            options.addAll(0, executableParts.drop(1))
 
             project.exec {
-                executable = 'solc'
+                // Use first part as executable
+                executable = executableParts[0]
+                // Use other parts and options as args
                 args = options
             }
         }
+    }
+
+    String getExecutable() {
+        return executable
+    }
+
+    void setExecutable(final String executable) {
+        this.executable = executable
+    }
+
+    String getVersion() {
+        return version
+    }
+
+    void setVersion(String version) {
+        this.version = version
+    }
+
+    boolean supportsEvmVersionOption() {
+        return version.split('\\.').last().toInteger() >= 24
     }
 
     Boolean getOverwrite() {

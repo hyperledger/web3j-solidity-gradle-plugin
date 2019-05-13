@@ -1,11 +1,13 @@
 package org.web3j.solidity.gradle.plugin
 
+import groovy.transform.CompileStatic
 import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
 
 /**
  * Source set for Solidity classes in a Gradle project.
  */
+@CompileStatic
 interface SoliditySourceSet {
 
     /**

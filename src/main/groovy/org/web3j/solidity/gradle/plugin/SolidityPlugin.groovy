@@ -9,6 +9,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 
 import javax.inject.Inject
+import java.util.stream.Collectors
 
 import static org.codehaus.groovy.runtime.StringGroovyMethods.capitalize
 import static org.web3j.solidity.gradle.plugin.SoliditySourceSet.NAME
@@ -19,6 +20,8 @@ import static org.web3j.solidity.gradle.plugin.SoliditySourceSet.NAME
 class SolidityPlugin implements Plugin<Project> {
 
     private final SourceDirectorySetFactory sourceFactory
+
+    private SolidityCompiler solc
 
     @Inject
     SolidityPlugin(final SourceDirectorySetFactory sourceFactory) {
@@ -38,7 +41,10 @@ class SolidityPlugin implements Plugin<Project> {
             configureSourceSet(target, sourceSet)
         }
 
+        configureSolidityClasspath(target)
+
         target.afterEvaluate {
+            configureSolidityCompiler(target)
             sourceSets.all { SourceSet sourceSet ->
                 configureTask(target, sourceSet)
                 configureAllowPath(target, sourceSet)
@@ -74,19 +80,26 @@ class SolidityPlugin implements Plugin<Project> {
      * is <code>compileSolidity</code> and for <code>test</code>
      * <code>compileTestSolidity</code>.
      */
-    private static void configureTask(final Project project, final SourceSet sourceSet) {
+    private void configureTask(final Project project, final SourceSet sourceSet) {
 
         def srcSetName = sourceSet.name == 'main' ?
                 '' : capitalize((CharSequence) sourceSet.name)
 
         def compileTask = project.tasks.create(
-                "compile" + srcSetName + "Solidity", SolidityCompile)
+                "compile${srcSetName}Solidity", SolidityCompile)
 
         def soliditySourceSet = sourceSet.convention.plugins[NAME] as SoliditySourceSet
 
-        // Set the sources for the generation task
-        compileTask.setSource(soliditySourceSet.solidity)
+        if (requiresBundledExecutable(project)) {
+            // Resolve executable from SolcJ bundled binaries
+            compileTask.executable = solc.executable.absolutePath
+        } else {
+            // Leave executable as specified by the user
+            compileTask.executable = project.solidity.executable
+        }
 
+        compileTask.version = project.solidity.version
+        compileTask.source = soliditySourceSet.solidity
         compileTask.outputComponents = project.solidity.outputComponents
         compileTask.overwrite = project.solidity.overwrite
         compileTask.optimize = project.solidity.optimize
@@ -96,10 +109,35 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.allowPaths = project.solidity.allowPaths
         compileTask.ignoreMissing = project.solidity.ignoreMissing
         compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
-        compileTask.description = "Compiles Solidity contracts " +
-                "for $sourceSet.name source set."
+        compileTask.description = "Compiles $sourceSet.name Solidity source."
 
         project.getTasks().getByName('build') dependsOn(compileTask)
+    }
+
+    /**
+     * Configure the SolcJ dependency to resolve the bundled executable.
+     */
+    private void configureSolidityClasspath(final Project project) {
+        if (requiresBundledExecutable(project)) {
+            project.repositories.maven {
+                url "https://dl.bintray.com/ethereum/maven"
+            }
+            project.dependencies {
+                implementation "org.ethereum:solcJ-all:${project.solidity.version}"
+            }
+        }
+    }
+
+    /**
+     * Configure the SolcJ compiler with the bundled executable.
+     */
+    private void configureSolidityCompiler(final Project project) {
+        if (requiresBundledExecutable(project)) {
+            final Set<File> files = project.configurations.getByName("compileClasspath").files
+            final List<URL> urls = files.stream().map({ it.toURI().toURL() }).collect(Collectors.toList())
+
+            solc = new SolidityCompiler(new URLClassLoader(urls.toArray(new URL[0] as URL[])))
+        }
     }
 
     private static void configureAllowPath(final Project project, final SourceSet sourceSet) {
@@ -107,4 +145,7 @@ class SolidityPlugin implements Plugin<Project> {
         project.solidity.allowPaths.add(allowPath)
     }
 
+    private static boolean requiresBundledExecutable(final Project project) {
+        return project.solidity.executable == null
+    }
 }

@@ -16,7 +16,7 @@ plugins {
 }
 
 group = 'org.web3j'
-version = '0.1.4'
+version = '0.1.6'
 description = 'Solidity Gradle Plugin'
 sourceCompatibility = 1.8
 
@@ -54,14 +54,23 @@ jacocoTestReport {
 
 ext {
     junitVersion = '4.12'
+    solcJVersion = '0.4.25'
+    assertjVersion = '3.12.2'
+    systemRulesVersion = '1.19.0'
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://dl.bintray.com/ethereum/maven'
+    }
 }
 
 dependencies {
-    testCompile "junit:junit:$junitVersion"
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.ethereum:solcJ-all:$solcJVersion"
+    testImplementation "org.assertj:assertj-core:$assertjVersion"
+    testImplementation "com.github.stefanbirkner:system-rules:$systemRulesVersion"
 }
 
 tasks.withType(Test) {
@@ -168,3 +177,4 @@ task release {
     tasks.findByName('bintrayUpload').mustRunAfter 'build'
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8

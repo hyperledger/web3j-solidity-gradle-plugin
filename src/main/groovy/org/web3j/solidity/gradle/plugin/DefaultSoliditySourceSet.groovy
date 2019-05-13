@@ -1,5 +1,6 @@
 package org.web3j.solidity.gradle.plugin
 
+import groovy.transform.CompileStatic
 import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.SourceDirectorySetFactory
@@ -10,6 +11,7 @@ import org.gradle.util.ConfigureUtil
 /**
  * SoliditySourceSet default implementation.
  */
+@CompileStatic
 class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
 
     private final SourceDirectorySet solidity
