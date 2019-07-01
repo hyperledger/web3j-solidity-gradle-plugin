@@ -6,6 +6,8 @@ to compile Solidity contracts, but it can be used in any standalone project for 
 
 ## Plugin configuration
 
+The minimum Gradle version to run the plugin is `5.+`.
+
 ### Using the `buildscript` convention
 
 To install the Solidity Plugin using the old Gradle `buildscript` convention, you should add 
