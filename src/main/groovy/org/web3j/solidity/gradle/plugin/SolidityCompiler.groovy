@@ -34,6 +34,10 @@ class SolidityCompiler {
     }
 
     private void init() throws IOException {
+        if (OperatingSystem.current().isWindows() && !checkWindowsVcppExists(System.getenv("PATH"))) {
+            throw new IOException("Visual C++ Redistributable is not installed please download it from: https://www.microsoft.com/en-us/download/details.aspx?id=52685")
+        }
+
         final def tmpDir = new File(System.getProperty('java.io.tmpdir'), 'solc')
         tmpDir.mkdirs()
 
@@ -58,6 +62,10 @@ class SolidityCompiler {
                 }
             }
         }
+    }
+
+    static boolean checkWindowsVcppExists(String pathVariable) {
+        return Arrays.stream(pathVariable.split(";")).anyMatch({ p -> new File(p + File.separator + "vcruntime140.dll").exists() })
     }
 
     private InputStream getResourceAsStream(final String name) {
