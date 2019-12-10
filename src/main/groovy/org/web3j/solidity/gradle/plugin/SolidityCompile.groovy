@@ -54,6 +54,9 @@ class SolidityCompile extends SourceTask {
                 options.add("--$output")
             }
 
+            options.add("--combined-json")
+            options.add("abi,bin,bin-runtime,compact-format,interface,srcmap,srcmap-runtime")
+
             if (optimize) {
                 options.add('--optimize')
 
@@ -101,6 +104,12 @@ class SolidityCompile extends SourceTask {
                 // Use other parts and options as args
                 args = options
             }
+
+            def metajsonFile = new File(outputs.files.singleFile, "combined.json")
+            def contractName = contract.getName()
+            def newMetaName = contractName.substring(0, contractName.length() - 4) + ".json"
+
+            metajsonFile.renameTo(new File(metajsonFile.getParentFile(), newMetaName))
         }
     }
 
