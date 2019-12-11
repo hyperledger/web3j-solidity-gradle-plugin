@@ -101,6 +101,7 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.version = project.solidity.version
         compileTask.source = soliditySourceSet.solidity
         compileTask.outputComponents = project.solidity.outputComponents
+        compileTask.combinedOutputComponents = project.solidity.combinedOutputComponents
         compileTask.overwrite = project.solidity.overwrite
         compileTask.optimize = project.solidity.optimize
         compileTask.optimizeRuns = project.solidity.optimizeRuns

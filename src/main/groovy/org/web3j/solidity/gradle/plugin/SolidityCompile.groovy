@@ -45,6 +45,10 @@ class SolidityCompile extends SourceTask {
     @Optional
     private OutputComponent[] outputComponents
 
+    @Input
+    @Optional
+    private CombinedOutputComponent[] combinedOutputComponents
+
     @TaskAction
     void compileSolidity() {
         for (def contract in source) {
@@ -52,6 +56,11 @@ class SolidityCompile extends SourceTask {
 
             for (output in outputComponents) {
                 options.add("--$output")
+            }
+
+            if (combinedOutputComponents?.length > 0) {
+                options.add("--combined-json")
+                options.add(combinedOutputComponents.join(","))
             }
 
             if (optimize) {
@@ -100,6 +109,14 @@ class SolidityCompile extends SourceTask {
                 executable = executableParts[0]
                 // Use other parts and options as args
                 args = options
+            }
+
+            if (combinedOutputComponents?.length > 0) {
+                def metajsonFile = new File(outputs.files.singleFile, "combined.json")
+                def contractName = contract.getName()
+                def newMetaName = contractName.substring(0, contractName.length() - 4) + ".json"
+
+                metajsonFile.renameTo(new File(metajsonFile.getParentFile(), newMetaName))
             }
         }
     }
@@ -188,4 +205,11 @@ class SolidityCompile extends SourceTask {
         this.outputComponents = outputComponents
     }
 
+    CombinedOutputComponent[] getCombinedOutputComponents() {
+        return combinedOutputComponents
+    }
+
+    void setCombinedOutputComponents(CombinedOutputComponent[] combinedOutputComponents) {
+        this.combinedOutputComponents = combinedOutputComponents
+    }
 }
