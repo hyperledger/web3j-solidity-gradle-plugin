@@ -6,8 +6,6 @@ import org.gradle.api.Project
 import javax.inject.Inject
 
 import static EVMVersion.BYZANTIUM
-import static org.web3j.solidity.gradle.plugin.OutputComponent.ABI
-import static org.web3j.solidity.gradle.plugin.OutputComponent.BIN
 
 /**
  * Extension for Solidity compilation options.
@@ -39,6 +37,8 @@ class SolidityExtension {
 
     private OutputComponent[] outputComponents
 
+    private CombinedOutputComponent[] combinedOutputComponents
+
     @Inject
     SolidityExtension(final Project project) {
         this.project = project
@@ -51,7 +51,8 @@ class SolidityExtension {
         this.ignoreMissing = false
         this.allowPaths = []
         this.evmVersion = BYZANTIUM
-        this.outputComponents = [BIN, ABI]
+        this.outputComponents = [OutputComponent.BIN, OutputComponent.ABI]
+        this.combinedOutputComponents = [CombinedOutputComponent.BIN, CombinedOutputComponent.BIN_RUNTIME, CombinedOutputComponent.SRCMAP, CombinedOutputComponent.SRCMAP_RUNTIME]
     }
 
     String getVersion() {
@@ -134,4 +135,11 @@ class SolidityExtension {
         this.outputComponents = outputComponents
     }
 
+    CombinedOutputComponent[] getCombinedOutputComponents() {
+        return combinedOutputComponents
+    }
+
+    void setCombinedOutputComponents(final CombinedOutputComponent[] combinedOutputComponents) {
+        this.combinedOutputComponents = combinedOutputComponents
+    }
 }

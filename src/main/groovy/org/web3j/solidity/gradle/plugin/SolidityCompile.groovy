@@ -45,6 +45,10 @@ class SolidityCompile extends SourceTask {
     @Optional
     private OutputComponent[] outputComponents
 
+    @Input
+    @Optional
+    private CombinedOutputComponent[] combinedOutputComponents
+
     @TaskAction
     void compileSolidity() {
         for (def contract in source) {
@@ -54,8 +58,10 @@ class SolidityCompile extends SourceTask {
                 options.add("--$output")
             }
 
-            options.add("--combined-json")
-            options.add("abi,bin,bin-runtime,compact-format,interface,srcmap,srcmap-runtime")
+            if (combinedOutputComponents?.length > 0) {
+                options.add("--combined-json")
+                options.add(combinedOutputComponents.join(","))
+            }
 
             if (optimize) {
                 options.add('--optimize')
@@ -105,11 +111,13 @@ class SolidityCompile extends SourceTask {
                 args = options
             }
 
-            def metajsonFile = new File(outputs.files.singleFile, "combined.json")
-            def contractName = contract.getName()
-            def newMetaName = contractName.substring(0, contractName.length() - 4) + ".json"
+            if (combinedOutputComponents?.length > 0) {
+                def metajsonFile = new File(outputs.files.singleFile, "combined.json")
+                def contractName = contract.getName()
+                def newMetaName = contractName.substring(0, contractName.length() - 4) + ".json"
 
-            metajsonFile.renameTo(new File(metajsonFile.getParentFile(), newMetaName))
+                metajsonFile.renameTo(new File(metajsonFile.getParentFile(), newMetaName))
+            }
         }
     }
 
@@ -197,4 +205,11 @@ class SolidityCompile extends SourceTask {
         this.outputComponents = outputComponents
     }
 
+    CombinedOutputComponent[] getCombinedOutputComponents() {
+        return combinedOutputComponents
+    }
+
+    void setCombinedOutputComponents(CombinedOutputComponent[] combinedOutputComponents) {
+        this.combinedOutputComponents = combinedOutputComponents
+    }
 }
