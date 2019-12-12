@@ -29,8 +29,7 @@ apply {
         'java',
         'javadoc',
         'repositories',
-        'publish',
-        'spotless'
+        'publish'
     ].each { buildScript ->
         download {
             src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
@@ -86,6 +85,14 @@ dependencies {
     testImplementation "org.ethereum:solcJ-all:$solcJVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "com.github.stefanbirkner:system-rules:$systemRulesVersion"
+}
+
+spotless {
+    groovy {
+        excludeJava() // excludes all Java sources within the Groovy source dirs from formatting
+        paddedCell() // Avoid cyclic ambiguities
+        licenseHeaderFile "$rootDir/gradle/spotless/java.license"
+    }
 }
 
 publishing {
