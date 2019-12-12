@@ -20,7 +20,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.web3j:solidity-gradle-plugin:0.1.6'
+        classpath 'org.web3j:solidity-gradle-plugin:0.1.7'
     }
 }
 
@@ -34,7 +34,7 @@ build file:
 
 ```groovy
 plugins {
-    id 'solidity' version '0.1.6'
+    id 'solidity' version '0.1.7'
 }
 ```
 
@@ -74,18 +74,19 @@ solidity {
 
 The properties accepted by the DSL are listed in the following table:
 
-|  Name              | Type                | Default value                            | Description                 |
-|--------------------|:-------------------:|:----------------------------------------:|-----------------------------|
-| `executable`       | `String`            | `null` (bundled with the plugin)         | Solidity compiler path.     |
-| `version`          | `String`            | `0.4.25`                                 | Solidity compiler version.  |
-| `overwrite`        | `Boolean`           | `true`                                   | Overwrite existing files.   |
-| `optimize`         | `Boolean`           | `true`                                   | Enable byte code optimizer. |
-| `optimizeRuns`     | `Integer`           | `200`                                    | Set for how many contract runs to optimize. |
-| `prettyJson`       | `Boolean`           | `false`                                  | Output JSON in pretty format. Enables the combined JSON output. |
-| `ignoreMissing`    | `Boolean`           | `false`                                  | Ignore missing files. |
-| `allowPaths`       | `List<String>`      | `['src/main/solidity', 'src/test/solidity', ...]` | Allow a given path for imports. |
-| `evmVersion`       | `EVMVersion`        | `BYZANTIUM`                              | Select desired EVM version. |
-| `outputComponents` | `OutputComponent[]` | `[BIN, ABI]`                             | List of output components to produce. |
+|  Name                      | Type                        | Default value                                     | Description                                                     |
+|----------------------------|:---------------------------:|:-------------------------------------------------:|-----------------------------------------------------------------|
+| `executable`               | `String`                    | `null` (bundled with the plugin)                  | Solidity compiler path.                                         |
+| `version`                  | `String`                    | `0.4.25`                                          | Solidity compiler version.                                      |
+| `overwrite`                | `Boolean`                   | `true`                                            | Overwrite existing files.                                       |
+| `optimize`                 | `Boolean`                   | `true`                                            | Enable byte code optimizer.                                     |
+| `optimizeRuns`             | `Integer`                   | `200`                                             | Set for how many contract runs to optimize.                     |
+| `prettyJson`               | `Boolean`                   | `false`                                           | Output JSON in pretty format. Enables the combined JSON output. |
+| `ignoreMissing`            | `Boolean`                   | `false`                                           | Ignore missing files.                                           |
+| `allowPaths`               | `List<String>`              | `['src/main/solidity', 'src/test/solidity', ...]` | Allow a given path for imports.                                 |
+| `evmVersion`               | `EVMVersion`                | `BYZANTIUM`                                       | Select desired EVM version.                                     |
+| `outputComponents`         | `OutputComponent[]`         | `[BIN, ABI]`                                      | List of output components to produce.                           |
+| `combinedOutputComponents` | `CombinedOutputComponent[]` | `[BIN, BIN_RUNTIME, SRCMAP, SRCMAP_RUNTIME]`      | List of output components in combined JSON output               |
 
 **Notes:** 
   - Setting the `executable` property will disable the bundled `solc` and use your local or containerized executable:
