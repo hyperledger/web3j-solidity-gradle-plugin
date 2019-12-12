@@ -24,13 +24,13 @@ plugins {
 
 apply {
     [
-            'bintray',
-            'jacoco',
-            'java',
-            'javadoc',
-            'repositories',
-            'publish',
-            'spotless'
+        'bintray',
+        'jacoco',
+        'java',
+        'javadoc',
+        'repositories',
+        'publish',
+        'spotless'
     ].each { buildScript ->
         download {
             src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
@@ -106,7 +106,7 @@ publishing {
                         organization = 'Web3 Labs'
                     }
                 }
-            } 
+            }
         }
     }
 }
