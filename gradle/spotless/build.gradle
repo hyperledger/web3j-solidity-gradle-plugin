@@ -42,6 +42,11 @@ spotless {
         endWithNewline()
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
     }
+    groovy {
+        excludeJava() // excludes all Java sources within the Groovy source dirs from formatting
+        paddedCell() // Avoid cyclic ambiguities
+        licenseHeaderFile "$rootDir/gradle/spotless/java.license"
+    }
     groovyGradle {
         target '*.gradle'
         greclipse().configFile("$rootDir/gradle/spotless/formatter.properties")
