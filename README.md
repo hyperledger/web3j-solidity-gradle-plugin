@@ -20,7 +20,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.web3j.solidity:solidity-gradle-plugin::0.1.7'
+        classpath 'org.web3j.solidity:solidity-gradle-plugin:0.1.7'
     }
 }
 
