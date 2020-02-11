@@ -19,6 +19,7 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import org.web3j.sokt.SolcInstance
 
 import javax.inject.Inject
 import java.util.stream.Collectors
@@ -32,8 +33,6 @@ import static org.web3j.solidity.gradle.plugin.SoliditySourceSet.NAME
 class SolidityPlugin implements Plugin<Project> {
 
     private final SourceDirectorySetFactory sourceFactory
-
-    private SolidityCompiler solc
 
     @Inject
     SolidityPlugin(final SourceDirectorySetFactory sourceFactory) {
@@ -56,7 +55,6 @@ class SolidityPlugin implements Plugin<Project> {
         configureSolidityClasspath(target)
 
         target.afterEvaluate {
-            configureSolidityCompiler(target)
             sourceSets.all { SourceSet sourceSet ->
                 configureTask(target, sourceSet)
                 configureAllowPath(target, sourceSet)
@@ -102,10 +100,7 @@ class SolidityPlugin implements Plugin<Project> {
 
         def soliditySourceSet = sourceSet.convention.plugins[NAME] as SoliditySourceSet
 
-        if (requiresBundledExecutable(project)) {
-            // Resolve executable from SolcJ bundled binaries
-            compileTask.executable = solc.executable.absolutePath
-        } else {
+        if (!requiresBundledExecutable(project)) {
             // Leave executable as specified by the user
             compileTask.executable = project.solidity.executable
         }
@@ -144,14 +139,6 @@ class SolidityPlugin implements Plugin<Project> {
     /**
      * Configure the SolcJ compiler with the bundled executable.
      */
-    private void configureSolidityCompiler(final Project project) {
-        if (requiresBundledExecutable(project)) {
-            final Set<File> files = project.configurations.getByName("compileClasspath").files
-            final List<URL> urls = files.stream().map({ it.toURI().toURL() }).collect(Collectors.toList())
-
-            solc = new SolidityCompiler(new URLClassLoader(urls.toArray(new URL[0] as URL[])))
-        }
-    }
 
     private static void configureAllowPath(final Project project, final SourceSet sourceSet) {
         def allowPath = "$project.projectDir/src/$sourceSet.name/$NAME"

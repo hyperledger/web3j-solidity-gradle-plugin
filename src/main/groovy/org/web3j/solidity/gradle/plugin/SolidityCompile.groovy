@@ -13,6 +13,7 @@
 package org.web3j.solidity.gradle.plugin
 
 import org.gradle.api.tasks.*
+import org.web3j.sokt.SolidityFile
 
 @CacheableTask
 class SolidityCompile extends SourceTask {
@@ -112,6 +113,16 @@ class SolidityCompile extends SourceTask {
             options.add('--output-dir')
             options.add(project.projectDir.relativePath(outputs.files.singleFile))
             options.add(project.projectDir.relativePath(contract))
+
+
+            if (executable == null) {
+                def solidityFile = new SolidityFile(contract.getAbsolutePath())
+                def compilerInstance = solidityFile.getCompilerInstance(".web3j", true)
+                if (compilerInstance.installed() || !compilerInstance.installed() && compilerInstance.install()) {
+                    executable = compilerInstance.solcFile.getAbsolutePath()
+                }
+            }
+
 
             def executableParts = executable.split(' ')
             options.addAll(0, executableParts.drop(1))
