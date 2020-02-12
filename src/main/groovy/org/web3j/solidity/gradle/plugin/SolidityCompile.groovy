@@ -116,22 +116,17 @@ class SolidityCompile extends SourceTask {
             options.add(project.projectDir.relativePath(outputs.files.singleFile))
             options.add(project.projectDir.relativePath(contract))
 
-
             if (executable == null) {
                 def solidityFile = new SolidityFile(contract.getAbsolutePath())
-                SolcInstance compilerInstance = null
+                SolcInstance compilerInstance
                 if (version != null) {
-                    println version
-                    def resolvedVersion = new VersionResolver(".web3j").getSolcReleases().stream().filter({ i -> i.version == version }).findAny().orElse(null)
-                    if (resolvedVersion != null) {
-                        compilerInstance = new SolcInstance(resolvedVersion, ".web3j", false)
-                    } else {
-                        throw new Exception("Failed to resolve Solidity version $version from available versions. You may need to use a custom executable instead.")
+                    def resolvedVersion = new VersionResolver(".web3j").getSolcReleases().stream().filter({ i -> i.version == version }).findAny().orElseThrow {
+                        return new Exception("Failed to resolve Solidity version $version from available versions. You may need to use a custom executable instead.")
                     }
+                    compilerInstance = new SolcInstance(resolvedVersion, ".web3j", false)
                 } else {
                     compilerInstance = solidityFile.getCompilerInstance(".web3j", true)
                 }
-
 
                 if (compilerInstance.installed() || !compilerInstance.installed() && compilerInstance.install()) {
                     executable = compilerInstance.solcFile.getAbsolutePath()
