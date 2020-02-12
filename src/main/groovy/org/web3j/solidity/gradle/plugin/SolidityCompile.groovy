@@ -13,7 +13,9 @@
 package org.web3j.solidity.gradle.plugin
 
 import org.gradle.api.tasks.*
+import org.web3j.sokt.SolcInstance
 import org.web3j.sokt.SolidityFile
+import org.web3j.sokt.VersionResolver
 
 @CacheableTask
 class SolidityCompile extends SourceTask {
@@ -117,12 +119,24 @@ class SolidityCompile extends SourceTask {
 
             if (executable == null) {
                 def solidityFile = new SolidityFile(contract.getAbsolutePath())
-                def compilerInstance = solidityFile.getCompilerInstance(".web3j", true)
+                SolcInstance compilerInstance = null
+                if (version != null) {
+                    println version
+                    def resolvedVersion = new VersionResolver(".web3j").getSolcReleases().stream().filter({ i -> i.version == version }).findAny().orElse(null)
+                    if (resolvedVersion != null) {
+                        compilerInstance = new SolcInstance(resolvedVersion, ".web3j", false)
+                    } else {
+                        throw new Exception("Failed to resolve Solidity version $version from available versions. You may need to use a custom executable instead.")
+                    }
+                } else {
+                    compilerInstance = solidityFile.getCompilerInstance(".web3j", true)
+                }
+
+
                 if (compilerInstance.installed() || !compilerInstance.installed() && compilerInstance.install()) {
                     executable = compilerInstance.solcFile.getAbsolutePath()
                 }
             }
-
 
             def executableParts = executable.split(' ')
             options.addAll(0, executableParts.drop(1))
