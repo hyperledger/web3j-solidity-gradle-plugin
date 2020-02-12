@@ -17,6 +17,8 @@ import org.web3j.sokt.SolcInstance
 import org.web3j.sokt.SolidityFile
 import org.web3j.sokt.VersionResolver
 
+import java.nio.file.Paths
+
 @CacheableTask
 class SolidityCompile extends SourceTask {
 
@@ -133,14 +135,22 @@ class SolidityCompile extends SourceTask {
                 }
             }
 
-            def executableParts = executable.split(' ')
-            options.addAll(0, executableParts.drop(1))
-
-            project.exec {
-                // Use first part as executable
-                executable = executableParts[0]
-                // Use other parts and options as args
-                args = options
+            if (Paths.get(executable).toFile().exists()) {
+                // if the executable string is a file which exists, it may be a direct reference to the solc executable with a space in the path (Windows)
+                project.exec {
+                    executable = executable
+                    args = options
+                }
+            } else {
+                // otherwise we assume it's a normal reference to solidity or docker, possibly with args
+                def executableParts = executable.split(' ')
+                options.addAll(0, executableParts.drop(1))
+                project.exec {
+                    // Use first part as executable
+                    executable = executableParts[0]
+                    // Use other parts and options as args
+                    args = options
+                }
             }
 
             if (combinedOutputComponents?.length > 0) {
