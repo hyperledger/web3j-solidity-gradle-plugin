@@ -78,9 +78,11 @@ repositories {
     maven {
         url 'https://dl.bintray.com/ethereum/maven'
     }
+    maven { setUrl("https://dl.bintray.com/hotkeytlt/maven") }
 }
 
 dependencies {
+    compile group: 'org.web3j', name: 'web3j-sokt', version: '0.1.0'
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.ethereum:solcJ-all:$solcJVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"

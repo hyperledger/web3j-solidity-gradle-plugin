@@ -13,6 +13,11 @@
 package org.web3j.solidity.gradle.plugin
 
 import org.gradle.api.tasks.*
+import org.web3j.sokt.SolcInstance
+import org.web3j.sokt.SolidityFile
+import org.web3j.sokt.VersionResolver
+
+import java.nio.file.Paths
 
 @CacheableTask
 class SolidityCompile extends SourceTask {
@@ -113,14 +118,39 @@ class SolidityCompile extends SourceTask {
             options.add(project.projectDir.relativePath(outputs.files.singleFile))
             options.add(project.projectDir.relativePath(contract))
 
-            def executableParts = executable.split(' ')
-            options.addAll(0, executableParts.drop(1))
+            if (executable == null) {
+                def solidityFile = new SolidityFile(contract.getAbsolutePath())
+                SolcInstance compilerInstance
+                if (version != null) {
+                    def resolvedVersion = new VersionResolver(".web3j").getSolcReleases().stream().filter({ i -> i.version == version }).findAny().orElseThrow {
+                        return new Exception("Failed to resolve Solidity version $version from available versions. You may need to use a custom executable instead.")
+                    }
+                    compilerInstance = new SolcInstance(resolvedVersion, ".web3j", false)
+                } else {
+                    compilerInstance = solidityFile.getCompilerInstance(".web3j", true)
+                }
 
-            project.exec {
-                // Use first part as executable
-                executable = executableParts[0]
-                // Use other parts and options as args
-                args = options
+                if (compilerInstance.installed() || !compilerInstance.installed() && compilerInstance.install()) {
+                    executable = compilerInstance.solcFile.getAbsolutePath()
+                }
+            }
+
+            if (Paths.get(executable).toFile().exists()) {
+                // if the executable string is a file which exists, it may be a direct reference to the solc executable with a space in the path (Windows)
+                project.exec {
+                    executable = executable
+                    args = options
+                }
+            } else {
+                // otherwise we assume it's a normal reference to solidity or docker, possibly with args
+                def executableParts = executable.split(' ')
+                options.addAll(0, executableParts.drop(1))
+                project.exec {
+                    // Use first part as executable
+                    executable = executableParts[0]
+                    // Use other parts and options as args
+                    args = options
+                }
             }
 
             if (combinedOutputComponents?.length > 0) {
