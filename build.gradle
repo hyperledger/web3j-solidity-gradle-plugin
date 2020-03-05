@@ -82,7 +82,7 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.web3j', name: 'web3j-sokt', version: '0.1.0'
+    compile group: 'org.web3j', name: 'web3j-sokt', version: '0.2.0'
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.ethereum:solcJ-all:$solcJVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
