@@ -130,11 +130,9 @@ class SolidityCompile extends SourceTask {
                 }
             }
 
-            if (supportsEvmVersionOption()) {
-                if (evmVersion != null) {
-                    options.add("--evm-version")
-                    options.add(evmVersion.value)
-                }
+            if (evmVersion != null && supportsEvmVersionOption()) {
+                options.add("--evm-version")
+                options.add(evmVersion.value)
             }
 
             if (Paths.get(executable).toFile().exists()) {
@@ -182,7 +180,7 @@ class SolidityCompile extends SourceTask {
     }
 
     boolean supportsEvmVersionOption() {
-        return version.split('\\.').last().toInteger() >= 24
+        return version.split('\\.').last().toInteger() >= 24 || version.split('\\.')[1].toInteger() > 4
     }
 
     Boolean getOverwrite() {
