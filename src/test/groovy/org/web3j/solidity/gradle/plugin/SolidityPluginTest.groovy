@@ -75,6 +75,7 @@ class SolidityPluginTest {
             sourceSets {
                main {
                    solidity {
+                       exclude "eip/**"
                        exclude "greeter/**"
                        exclude "common/**"
                    }
@@ -88,10 +89,10 @@ class SolidityPluginTest {
         def compiledSolDir = new File(testProjectDir.root,
                 "build/resources/main/solidity")
 
-        def compiledAbi = new File(compiledSolDir, "EIP20.abi")
+        def compiledAbi = new File(compiledSolDir, "PrivacyProxy.abi")
         assertTrue(compiledAbi.exists())
 
-        def compiledBin = new File(compiledSolDir, "EIP20.bin")
+        def compiledBin = new File(compiledSolDir, "PrivacyProxy.bin")
         assertTrue(compiledBin.exists())
 
         def upToDate = build()
@@ -107,6 +108,7 @@ class SolidityPluginTest {
             sourceSets {
                main {
                    solidity {
+                       exclude "sol5/**"
                        exclude "common/**"
                        exclude "eip/**"
                    }
@@ -145,6 +147,7 @@ class SolidityPluginTest {
             sourceSets {
                main {
                    solidity {
+                       exclude "sol5/**"
                        exclude "greeter/**"
                        exclude "common/**"
                    }
@@ -181,6 +184,7 @@ class SolidityPluginTest {
             sourceSets {
                main {
                    solidity {
+                       exclude "sol5/**"
                        exclude "greeter/**"
                        exclude "common/**"
                    }
@@ -212,6 +216,7 @@ class SolidityPluginTest {
             sourceSets {
                main {
                    solidity {
+                       exclude "sol5/**"
                        exclude "eip/**"
                    }
                }
