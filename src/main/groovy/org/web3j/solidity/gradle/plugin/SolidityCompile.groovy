@@ -138,7 +138,7 @@ class SolidityCompile extends SourceTask {
             if (Paths.get(executable).toFile().exists()) {
                 // if the executable string is a file which exists, it may be a direct reference to the solc executable with a space in the path (Windows)
                 project.exec {
-                    executable = executable
+                    executable = this.executable
                     args = options
                 }
             } else {
