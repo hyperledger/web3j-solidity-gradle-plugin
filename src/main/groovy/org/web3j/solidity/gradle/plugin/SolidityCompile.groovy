@@ -1,6 +1,23 @@
+/*
+ * Copyright 2019 Web3 Labs Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 package org.web3j.solidity.gradle.plugin
 
 import org.gradle.api.tasks.*
+import org.web3j.sokt.SolcInstance
+import org.web3j.sokt.SolidityFile
+import org.web3j.sokt.VersionResolver
+
+import java.nio.file.Paths
 
 @CacheableTask
 class SolidityCompile extends SourceTask {
@@ -45,6 +62,10 @@ class SolidityCompile extends SourceTask {
     @Optional
     private OutputComponent[] outputComponents
 
+    @Input
+    @Optional
+    private CombinedOutputComponent[] combinedOutputComponents
+
     @TaskAction
     void compileSolidity() {
         for (def contract in source) {
@@ -52,6 +73,11 @@ class SolidityCompile extends SourceTask {
 
             for (output in outputComponents) {
                 options.add("--$output")
+            }
+
+            if (combinedOutputComponents?.length > 0) {
+                options.add("--combined-json")
+                options.add(combinedOutputComponents.join(","))
             }
 
             if (optimize) {
@@ -92,14 +118,47 @@ class SolidityCompile extends SourceTask {
             options.add(project.projectDir.relativePath(outputs.files.singleFile))
             options.add(project.projectDir.relativePath(contract))
 
-            def executableParts = executable.split(' ')
-            options.addAll(0, executableParts.drop(1))
+            if (executable == null) {
+                def solidityFile = new SolidityFile(contract.getAbsolutePath())
+                SolcInstance compilerInstance
+                if (version != null) {
+                    def resolvedVersion = new VersionResolver(".web3j").getSolcReleases().stream().filter({ i -> i.version == version }).findAny().orElseThrow {
+                        return new Exception("Failed to resolve Solidity version $version from available versions. You may need to use a custom executable instead.")
+                    }
+                    compilerInstance = new SolcInstance(resolvedVersion, ".web3j", false)
+                } else {
+                    compilerInstance = solidityFile.getCompilerInstance(".web3j", true)
+                }
 
-            project.exec {
-                // Use first part as executable
-                executable = executableParts[0]
-                // Use other parts and options as args
-                args = options
+                if (compilerInstance.installed() || !compilerInstance.installed() && compilerInstance.install()) {
+                    executable = compilerInstance.solcFile.getAbsolutePath()
+                }
+            }
+
+            if (Paths.get(executable).toFile().exists()) {
+                // if the executable string is a file which exists, it may be a direct reference to the solc executable with a space in the path (Windows)
+                project.exec {
+                    executable = this.executable
+                    args = options
+                }
+            } else {
+                // otherwise we assume it's a normal reference to solidity or docker, possibly with args
+                def executableParts = executable.split(' ')
+                options.addAll(0, executableParts.drop(1))
+                project.exec {
+                    // Use first part as executable
+                    executable = executableParts[0]
+                    // Use other parts and options as args
+                    args = options
+                }
+            }
+
+            if (combinedOutputComponents?.length > 0) {
+                def metajsonFile = new File(outputs.files.singleFile, "combined.json")
+                def contractName = contract.getName()
+                def newMetaName = contractName.substring(0, contractName.length() - 4) + ".json"
+
+                metajsonFile.renameTo(new File(metajsonFile.getParentFile(), newMetaName))
             }
         }
     }
@@ -188,4 +247,11 @@ class SolidityCompile extends SourceTask {
         this.outputComponents = outputComponents
     }
 
+    CombinedOutputComponent[] getCombinedOutputComponents() {
+        return combinedOutputComponents
+    }
+
+    void setCombinedOutputComponents(CombinedOutputComponent[] combinedOutputComponents) {
+        this.combinedOutputComponents = combinedOutputComponents
+    }
 }
