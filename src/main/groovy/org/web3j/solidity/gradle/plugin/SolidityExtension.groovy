@@ -54,7 +54,6 @@ class SolidityExtension {
     @Inject
     SolidityExtension(final Project project) {
         this.project = project
-        this.version = SolcVersion.v0_4_25.value
         this.executable = null
         this.optimize = true
         this.overwrite = true
