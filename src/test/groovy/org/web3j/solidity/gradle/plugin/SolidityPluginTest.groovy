@@ -89,10 +89,10 @@ class SolidityPluginTest {
         def compiledSolDir = new File(testProjectDir.root,
                 "build/resources/main/solidity")
 
-        def compiledAbi = new File(compiledSolDir, "PrivacyProxy.abi")
+        def compiledAbi = new File(compiledSolDir, "Greeter.abi")
         assertTrue(compiledAbi.exists())
 
-        def compiledBin = new File(compiledSolDir, "PrivacyProxy.bin")
+        def compiledBin = new File(compiledSolDir, "Greeter.bin")
         assertTrue(compiledBin.exists())
 
         def upToDate = build()
