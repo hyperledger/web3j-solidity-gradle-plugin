@@ -17,19 +17,15 @@ plugins {
     id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.10.1'
     id "com.diffplug.gradle.spotless" version '3.25.0'
-    id 'io.codearte.nexus-staging' version '0.21.1'
-    id "de.marcphilipp.nexus-publish" version '0.4.0'
     id "de.undercouch.download" version '4.0.0'
 }
 
 apply {
     [
-        'bintray',
         'jacoco',
         'java',
         'javadoc',
         'repositories',
-        'publish'
     ].each { buildScript ->
         download {
             src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
@@ -67,8 +63,8 @@ pluginBundle {
 }
 
 ext {
+    soktVersion = '0.2.0'
     junitVersion = '4.12'
-    solcJVersion = '0.4.25'
     assertjVersion = '3.12.2'
     systemRulesVersion = '1.19.0'
 }
@@ -78,13 +74,14 @@ repositories {
     maven {
         url 'https://dl.bintray.com/ethereum/maven'
     }
-    maven { setUrl("https://dl.bintray.com/hotkeytlt/maven") }
+    maven { 
+        url 'https://dl.bintray.com/hotkeytlt/maven'
+    }
 }
 
 dependencies {
-    compile group: 'org.web3j', name: 'web3j-sokt', version: '0.2.0'
+    implementation "org.web3j:web3j-sokt:$soktVersion"
     testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.ethereum:solcJ-all:$solcJVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "com.github.stefanbirkner:system-rules:$systemRulesVersion"
 }
@@ -95,31 +92,4 @@ spotless {
         paddedCell() // Avoid cyclic ambiguities
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
     }
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            pom {
-                developers {
-                    developer {
-                        id = 'conor10'
-                        name = 'Conor Svensson'
-                        email = 'conor@web3labs.com'
-                        organization = 'Web3 Labs'
-                    }
-                    developer {
-                        id = 'xaviarias'
-                        name = 'Xavier Arias'
-                        email = 'xavier@web3labs.com'
-                        organization = 'Web3 Labs'
-                    }
-                }
-            }
-        }
-    }
-}
-
-bintrayUpload {
-    enabled = false
 }
