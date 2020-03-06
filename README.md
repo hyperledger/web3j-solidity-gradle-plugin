@@ -20,7 +20,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.web3j.solidity:solidity-gradle-plugin:0.1.7'
+        classpath 'org.web3j.solidity:solidity-gradle-plugin:0.2.0'
     }
 }
 
@@ -34,7 +34,7 @@ build file:
 
 ```groovy
 plugins {
-    id 'org.web3j.solidity' version '0.1.7'
+    id 'org.web3j.solidity' version '0.2.0'
 }
 ```
 
@@ -126,8 +126,11 @@ The [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 adds tasks to your project build using a naming convention on a per source set basis
 (i.e. `compileJava`, `compileTestJava`).
 
-Similarly, the Solidity plugin will add the `compileSolidity` task for the project `main`
-source set, and a `compile[SourceSet]Solidity` for each remaining source set (e.g. `test`). 
+Similarly, the Solidity plugin will add a:
+
+   * `compileSolidity` task for the project `main` source set.
+   * `compile<SourceSet>Solidity` for each remaining source set 
+     (e.g. `compileTestSolidity` for the `test` source set, etc.). 
 
 To obtain a list and description of all added tasks, run the command:
 
