@@ -97,7 +97,7 @@ The properties accepted by the DSL are listed in the following table:
     }
   ```
   - Use `version` to change the bundled Solidity version. 
-    Check the [SolJ distributions](https://bintray.com/ethereum/maven/org.ethereum.solcJ-all/) 
+    Check the [Solidity releases](https://github.com/ethereum/solidity/releases) 
     for all available versions.
   - `allowPaths` contains all project's Solidity source sets by default.
 
