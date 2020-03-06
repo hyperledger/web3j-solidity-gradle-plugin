@@ -24,7 +24,7 @@ buildscript {
     }
 }
 
-apply plugin: 'solidity'
+apply plugin: 'org.web3j.solidity'
 ```
 
 ### Using the plugins DSL
@@ -34,12 +34,12 @@ build file:
 
 ```groovy
 plugins {
-    id 'solidity' version '0.1.7'
+    id 'org.web3j.solidity' version '0.1.7'
 }
 ```
 
 You will need to add the following configuration in the first line of your `settings.gradle` 
-file to resolve the artifact from the Epiphyte repository.
+file to resolve the artifact.
 
 ```groovy
 pluginManagement {
