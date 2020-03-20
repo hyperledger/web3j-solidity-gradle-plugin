@@ -14,11 +14,7 @@ package org.web3j.solidity.gradle.plugin
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Ignore
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.rules.TemporaryFolder
 
 import java.nio.file.Files
@@ -94,6 +90,9 @@ class SolidityPluginTest {
 
         def compiledBin = new File(compiledSolDir, "Greeter.bin")
         assertTrue(compiledBin.exists())
+
+        def generatedMeta = new File(compiledSolDir, "Greeter_meta.json")
+        assertTrue(generatedMeta.exists())
 
         def upToDate = build()
         assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
