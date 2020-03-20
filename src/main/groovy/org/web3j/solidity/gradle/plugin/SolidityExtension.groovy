@@ -62,8 +62,17 @@ class SolidityExtension {
         this.ignoreMissing = false
         this.allowPaths = []
         this.evmVersion = BYZANTIUM
-        this.outputComponents = [OutputComponent.BIN, OutputComponent.ABI]
-        this.combinedOutputComponents = [CombinedOutputComponent.BIN, CombinedOutputComponent.BIN_RUNTIME, CombinedOutputComponent.SRCMAP, CombinedOutputComponent.SRCMAP_RUNTIME]
+        this.outputComponents = [
+                OutputComponent.BIN,
+                OutputComponent.ABI,
+                OutputComponent.METADATA
+        ]
+        this.combinedOutputComponents = [
+                CombinedOutputComponent.BIN,
+                CombinedOutputComponent.BIN_RUNTIME,
+                CombinedOutputComponent.SRCMAP,
+                CombinedOutputComponent.SRCMAP_RUNTIME
+        ]
     }
 
     String getVersion() {
