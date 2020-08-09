@@ -20,6 +20,12 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 enum SolcVersion {
+    v0_6_10('0.6.10'),
+    v0_6_9('0.6.9'),
+    v0_6_8('0.6.8'),
+    v0_6_7('0.6.7'),
+    v0_6_6('0.6.6'),
+    v0_6_5('0.6.5'),
     v0_5_7('0.5.7'),
     v0_5_6('0.5.6'),
     v0_5_2('0.5.2'),
