@@ -38,6 +38,7 @@ pluginManagement {
         }
     }
 }
+```
 
 Then run this command from your project containing Solidity contracts:
 
