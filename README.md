@@ -1,52 +1,28 @@
 Solidity Gradle Plugin
 ======================
 
-Simple Gradle plugin used by the [web3j plugin](https://github.com/web3j/web3j-gradle-plugin) 
+Simple Gradle plugin used by the [Web3j plugin](https://github.com/web3j/web3j-gradle-plugin) 
 to compile Solidity contracts, but it can be used in any standalone project for this purpose.
 
 ## Plugin configuration
 
+To configure the Solidity Gradle Plugin using the plugins DSL or the legacy plugin application, 
+check the [plugin page](https://plugins.gradle.org/plugin/org.web3j.solidity). 
 The minimum Gradle version to run the plugin is `5.+`.
 
-### Using the `buildscript` convention
+[//]: # (FIXME Remove this paragraph after Sokt works without hotkeytlt)
 
-To install the Solidity Plugin using the old Gradle `buildscript` convention, you should add 
-the following to the first line of your build file (at the moment only release versions 
-are supported in Gradle, not SNAPSHOT):
+In addition, you'll need to add this repository to your `buildscript` configuration: 
 
 ```groovy
 buildscript {
     repositories {
-        mavenCentral()
+        ...
+        maven {
+            url 'https://dl.bintray.com/hotkeytlt/maven'
+        }
     }
-    dependencies {
-        classpath 'org.web3j.solidity:solidity-gradle-plugin:0.2.0'
-    }
-}
-
-apply plugin: 'org.web3j.solidity'
-```
-
-### Using the plugins DSL
-
-Alternatively, if you are using the more modern plugins DSL, add the following line to your 
-build file:
-
-```groovy
-plugins {
-    id 'org.web3j.solidity' version '0.2.0'
-}
-```
-
-You will need to add the following configuration in the first line of your `settings.gradle` 
-file to resolve the artifact.
-
-```groovy
-pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
+    ...
 }
 ```
 
