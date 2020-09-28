@@ -13,6 +13,7 @@
 package org.web3j.solidity.gradle.plugin
 
 import org.gradle.api.tasks.*
+import org.gradle.internal.os.OperatingSystem
 import org.web3j.sokt.SolcInstance
 import org.web3j.sokt.SolidityFile
 import org.web3j.sokt.VersionResolver
@@ -68,6 +69,10 @@ class SolidityCompile extends SourceTask {
 
     @TaskAction
     void compileSolidity() {
+        if ((OperatingSystem.current().isWindows() || System.getProperty("os.name") == "Windows 10") && !checkWindowsVcppExists(System.getenv("PATH"))) {
+            throw new IOException("Visual C++ Redistributable is not installed please download it from: https://www.microsoft.com/en-us/download/details.aspx?id=52685")
+        }
+
         for (def contract in source) {
             def options = []
 
@@ -253,5 +258,9 @@ class SolidityCompile extends SourceTask {
 
     void setCombinedOutputComponents(CombinedOutputComponent[] combinedOutputComponents) {
         this.combinedOutputComponents = combinedOutputComponents
+    }
+
+    static boolean checkWindowsVcppExists(String pathVariable) {
+        return Arrays.stream(pathVariable.split(";")).anyMatch({ p -> new File(p + File.separator + "vcruntime140.dll").exists() })
     }
 }

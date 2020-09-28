@@ -14,6 +14,7 @@ package org.web3j.solidity.gradle.plugin
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.*
 import org.junit.rules.TemporaryFolder
 
@@ -31,6 +32,9 @@ class SolidityPluginTest {
      * Gradle project directory where the test project will be run.
      * Has to be under <code>/tmp</code> because of Docker file sharing defaults.
      */
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
     @Rule
     public final TemporaryFolder testProjectDir = new TemporaryFolder(new File('/tmp'))
 
@@ -60,6 +64,11 @@ class SolidityPluginTest {
             final def file = testProjectDir.newFile("src/main/solidity/$fileName")
             Files.copy(it, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
         }
+    }
+
+    @After
+    void tearDown() {
+        System.setProperty("os.name", "")
     }
 
     @Test
@@ -168,6 +177,34 @@ class SolidityPluginTest {
 
         def upToDate = build()
         assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+    }
+
+    @Test(expected = UnexpectedBuildFailure.class)
+    void compileOnWindowsWhenDllIsMissing() {
+        buildFile << """
+            plugins {
+               id 'org.web3j.solidity'
+            }
+            sourceSets {
+               main {
+                   solidity {
+                       exclude "eip/**"
+                       exclude "greeter/**"
+                       exclude "common/**"
+                   }
+               }
+            }
+        """
+        System.setProperty("os.name", "Windows 10")
+        build()
+    }
+
+    @Test
+    void checkThatDLLIsOnPath() {
+        def requiredFile = folder.newFile("vcruntime140.dll")
+        assertEquals(true,SolidityCompile.checkWindowsVcppExists("/var/;/etc/;" + requiredFile.getParent()))
+
+
     }
 
     @Test
