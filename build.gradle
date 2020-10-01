@@ -1,6 +1,7 @@
 plugins {
     id 'idea'
     id 'maven'
+    id 'maven-publish'
     id 'groovy'
     id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.12.0'
