@@ -35,6 +35,11 @@ class SolidityPluginTest {
     public final TemporaryFolder testProjectDir = new TemporaryFolder(new File('/tmp'))
 
     /**
+     * Folder containing Solidity smart contracts with different versions.
+     */
+    private final String differentVersionsFolderName = "different_versions"
+
+    /**
      * Solidity sources directory.
      */
     private static File sourcesDir
@@ -74,6 +79,7 @@ class SolidityPluginTest {
                        exclude "eip/**"
                        exclude "greeter/**"
                        exclude "common/**"
+                       exclude "$differentVersionsFolderName/**"
                    }
                }
             }
@@ -110,6 +116,7 @@ class SolidityPluginTest {
                        exclude "sol5/**"
                        exclude "common/**"
                        exclude "eip/**"
+                       exclude "$differentVersionsFolderName/**"
                    }
                }
             }
@@ -149,6 +156,7 @@ class SolidityPluginTest {
                        exclude "sol5/**"
                        exclude "greeter/**"
                        exclude "common/**"
+                       exclude "$differentVersionsFolderName/**"
                    }
                }
             }
@@ -186,6 +194,7 @@ class SolidityPluginTest {
                        exclude "sol5/**"
                        exclude "greeter/**"
                        exclude "common/**"
+                       exclude "$differentVersionsFolderName/**"
                    }
                }
             }
@@ -217,6 +226,7 @@ class SolidityPluginTest {
                    solidity {
                        exclude "sol5/**"
                        exclude "eip/**"
+                       exclude "$differentVersionsFolderName/**"
                    }
                }
             }
@@ -241,6 +251,28 @@ class SolidityPluginTest {
 
         def upToDate = build()
         assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+    }
+
+    @Test
+    void compileSolidityWithDifferentVersions() {
+        buildFile << """
+            plugins {
+               id 'org.web3j.solidity'
+            }
+            sourceSets {
+               main {
+                   solidity {
+                       exclude "eip/**"
+                       exclude "greeter/**"
+                       exclude "common/**"
+                       exclude "sol5/**"
+                   }
+               }
+            }
+        """
+
+        def success = build()
+        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
     }
 
     private BuildResult build() {
