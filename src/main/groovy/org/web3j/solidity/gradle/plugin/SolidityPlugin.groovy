@@ -12,6 +12,8 @@
  */
 package org.web3j.solidity.gradle.plugin
 
+import com.github.gradle.node.NodeExtension
+import com.github.gradle.node.NodePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.internal.file.SourceDirectorySetFactory
@@ -31,15 +33,18 @@ import static org.web3j.solidity.gradle.plugin.SoliditySourceSet.NAME
 class SolidityPlugin implements Plugin<Project> {
 
     private final SourceDirectorySetFactory sourceFactory
+    private final SoliditySourceSet resolvedSolidity
 
     @Inject
     SolidityPlugin(final SourceDirectorySetFactory sourceFactory) {
         this.sourceFactory = sourceFactory
+        this.resolvedSolidity = new DefaultSoliditySourceSet("All", sourceFactory)
     }
 
     @Override
     void apply(final Project target) {
         target.pluginManager.apply(JavaPlugin.class)
+        target.pluginManager.apply(NodePlugin.class)
         target.extensions.create(SolidityExtension.NAME,
                 SolidityExtension, target)
 
@@ -54,8 +59,20 @@ class SolidityPlugin implements Plugin<Project> {
             sourceSets.all { SourceSet sourceSet ->
                 configureTask(target, sourceSet)
                 configureAllowPath(target, sourceSet)
+                sourceSet.allSource.srcDirs.forEach {
+                    resolvedSolidity.solidity.srcDir(it)
+                }
             }
         }
+        def resolveSolidity = target.tasks.create(
+                "resolveSolidity", SolidityDependenciesResolver)
+        def nodeExtension = target.extensions.getByName(NodeExtension.NAME) as NodeExtension
+        nodeExtension.nodeProjectDir = target.objects.directoryProperty().convention(target.layout.buildDirectory.dir("resources"))
+        println("${target.objects.directoryProperty().convention(target.layout.buildDirectory.dir("resources"))}")
+        resolveSolidity.source = resolvedSolidity.solidity
+        resolveSolidity.outputs.file("$target.buildDir/resources/package.json")
+
+
     }
 
     /**
@@ -94,12 +111,14 @@ class SolidityPlugin implements Plugin<Project> {
         def compileTask = project.tasks.create(
                 "compile${srcSetName}Solidity", SolidityCompile)
 
+
         def soliditySourceSet = sourceSet.convention.plugins[NAME] as SoliditySourceSet
 
         if (!requiresBundledExecutable(project)) {
             // Leave executable as specified by the user
             compileTask.executable = project.solidity.executable
         }
+
 
         compileTask.version = project.solidity.version
         compileTask.source = soliditySourceSet.solidity
@@ -114,9 +133,13 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.ignoreMissing = project.solidity.ignoreMissing
         compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
         compileTask.description = "Compiles $sourceSet.name Solidity source."
-
+        project.getTasks().named('npmInstall').configure {
+            dependsOn(project.getTasks().named("resolveSolidity"))
+        }
+        compileTask.dependsOn(project.getTasks().named("npmInstall"))
         project.getTasks().getByName('build') dependsOn(compileTask)
     }
+
 
     /**
      * Configure the SolcJ compiler with the bundled executable.

@@ -74,6 +74,7 @@ class SolidityPluginTest {
                        exclude "eip/**"
                        exclude "greeter/**"
                        exclude "common/**"
+                       exclude "openzeppelin/**"
                    }
                }
             }
@@ -249,7 +250,7 @@ class SolidityPluginTest {
                 .withArguments("build")
                 .withPluginClasspath()
                 .forwardOutput()
-                .withDebug(true)
+                .withDebug(false)
                 .build()
     }
 }
