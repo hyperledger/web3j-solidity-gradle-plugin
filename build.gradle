@@ -7,17 +7,15 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.12.0'
     id 'com.diffplug.gradle.spotless' version '4.5.1'
     id 'de.undercouch.download' version '4.1.1'
-
-
 }
 
 apply {
     [
-            'jacoco',
-            'java',
-            'javadoc',
-            'repositories',
-            'spotless'
+        'jacoco',
+        'java',
+        'javadoc',
+        'repositories',
+        'spotless'
     ].each { buildScript ->
         download {
             src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
@@ -81,6 +79,3 @@ spotless {
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
     }
 }
-
-
-

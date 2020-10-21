@@ -16,6 +16,7 @@ import com.github.gradle.node.NodeExtension
 import com.github.gradle.node.NodePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.internal.file.SourceDirectorySetFactory
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
@@ -54,6 +55,9 @@ class SolidityPlugin implements Plugin<Project> {
         sourceSets.all { SourceSet sourceSet ->
             configureSourceSet(target, sourceSet)
         }
+        // Set nodeProjectDir to build before the node plugin evaluation
+        def nodeExtension = target.extensions.getByName(NodeExtension.NAME) as NodeExtension
+        nodeExtension.nodeProjectDir = target.objects.directoryProperty().convention(target.layout.buildDirectory)
 
         target.afterEvaluate {
             sourceSets.all { SourceSet sourceSet ->
@@ -63,16 +67,8 @@ class SolidityPlugin implements Plugin<Project> {
                     resolvedSolidity.solidity.srcDir(it)
                 }
             }
+            configureSolidityResolve(target, nodeExtension.nodeProjectDir)
         }
-        def resolveSolidity = target.tasks.create(
-                "resolveSolidity", SolidityDependenciesResolver)
-        def nodeExtension = target.extensions.getByName(NodeExtension.NAME) as NodeExtension
-        nodeExtension.nodeProjectDir = target.objects.directoryProperty().convention(target.layout.buildDirectory.dir("resources"))
-        println("${target.objects.directoryProperty().convention(target.layout.buildDirectory.dir("resources"))}")
-        resolveSolidity.source = resolvedSolidity.solidity
-        resolveSolidity.outputs.file("$target.buildDir/resources/package.json")
-
-
     }
 
     /**
@@ -118,8 +114,7 @@ class SolidityPlugin implements Plugin<Project> {
             // Leave executable as specified by the user
             compileTask.executable = project.solidity.executable
         }
-
-
+        compileTask.pathRemapping = project.solidity.pathRemappings
         compileTask.version = project.solidity.version
         compileTask.source = soliditySourceSet.solidity
         compileTask.outputComponents = project.solidity.outputComponents
@@ -133,6 +128,7 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.ignoreMissing = project.solidity.ignoreMissing
         compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
         compileTask.description = "Compiles $sourceSet.name Solidity source."
+
         project.getTasks().named('npmInstall').configure {
             dependsOn(project.getTasks().named("resolveSolidity"))
         }
@@ -140,6 +136,15 @@ class SolidityPlugin implements Plugin<Project> {
         project.getTasks().getByName('build') dependsOn(compileTask)
     }
 
+    private void configureSolidityResolve(Project target, DirectoryProperty nodeProjectDir) {
+        def resolveSolidity = target.tasks.create(
+                "resolveSolidity", SolidityResolve)
+        resolveSolidity.sources = resolvedSolidity.solidity
+        resolveSolidity.description = "Resolve external Solidity contract modules."
+        resolveSolidity.allowPaths = (target.extensions.solidity as SolidityExtension).getAllowPaths()
+        def packageJson = new File(nodeProjectDir.asFile.get(), "package.json")
+        resolveSolidity.packageJson = packageJson
+    }
 
     /**
      * Configure the SolcJ compiler with the bundled executable.

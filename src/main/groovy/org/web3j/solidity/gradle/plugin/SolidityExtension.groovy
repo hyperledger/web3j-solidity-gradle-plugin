@@ -44,6 +44,8 @@ class SolidityExtension {
     private Boolean ignoreMissing
 
     private List<String> allowPaths
+    
+    private Map<String, String> pathRemappings
 
     private EVMVersion evmVersion
 
@@ -61,6 +63,7 @@ class SolidityExtension {
         this.prettyJson = false
         this.ignoreMissing = false
         this.allowPaths = []
+        this.pathRemappings = [:]
         this.evmVersion = BYZANTIUM
         this.outputComponents = [
                 OutputComponent.BIN,
@@ -137,6 +140,14 @@ class SolidityExtension {
 
     void setAllowPaths(final List<String> allowPaths) {
         this.allowPaths = allowPaths
+    }
+
+    Map<String, String> getPathRemappings() {
+        return pathRemappings
+    }
+
+    void setPathRemappings(Map<String, String> pathRemappings) {
+        this.pathRemappings = pathRemappings
     }
 
     EVMVersion getEvmVersion() {

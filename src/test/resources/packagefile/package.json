@@ -1,7 +1,0 @@
-{
-  "name": "example",
-  "version": "0.0.0",
-  "dependencies": {
-    "@openzeppelin/contracts": "^3.2.0"
-  }
-}
