@@ -123,38 +123,41 @@ class SolidityCompile extends SourceTask {
             options.add(project.projectDir.relativePath(outputs.files.singleFile))
             options.add(project.projectDir.relativePath(contract))
 
-            if (executable == null) {
-                def solidityFile = new SolidityFile(contract.getAbsolutePath())
-                SolcInstance compilerInstance
-                if (version != null) {
+            def compilerVersion = version
+            def solidityFile = new SolidityFile(contract.getAbsolutePath())
+            String compilerExecutable = executable
+            SolcInstance compilerInstance
+
+            if (compilerExecutable == null) {
+                if (compilerVersion != null) {
                     def resolvedVersion = new VersionResolver(".web3j").getSolcReleases().stream().filter({ i -> i.version == version && i.isCompatibleWithOs() }).findAny().orElseThrow {
                         return new Exception("Failed to resolve Solidity version $version from available versions. You may need to use a custom executable instead.")
                     }
                     compilerInstance = new SolcInstance(resolvedVersion, ".web3j", false)
                 } else {
                     compilerInstance = solidityFile.getCompilerInstance(".web3j", true)
-                    this.version = compilerInstance.solcRelease.version
+                    compilerVersion = compilerInstance.solcRelease.version
                 }
 
                 if (compilerInstance.installed() || !compilerInstance.installed() && compilerInstance.install()) {
-                    executable = compilerInstance.solcFile.getAbsolutePath()
+                    compilerExecutable = compilerInstance.solcFile.getAbsolutePath()
                 }
             }
 
-            if (evmVersion != null && supportsEvmVersionOption()) {
+            if (evmVersion != null && supportsEvmVersionOption(compilerVersion)) {
                 options.add("--evm-version")
                 options.add(evmVersion.value)
             }
 
-            if (Paths.get(executable).toFile().exists()) {
+            if (Paths.get(compilerExecutable).toFile().exists()) {
                 // if the executable string is a file which exists, it may be a direct reference to the solc executable with a space in the path (Windows)
                 project.exec {
-                    executable = this.executable
+                    executable = compilerExecutable
                     args = options
                 }
             } else {
                 // otherwise we assume it's a normal reference to solidity or docker, possibly with args
-                def executableParts = executable.split(' ')
+                def executableParts = compilerExecutable.split(' ')
                 options.addAll(0, executableParts.drop(1))
                 project.exec {
                     // Use first part as executable
@@ -190,7 +193,7 @@ class SolidityCompile extends SourceTask {
         this.version = version
     }
 
-    boolean supportsEvmVersionOption() {
+    boolean supportsEvmVersionOption(String version) {
         return version.split('\\.').last().toInteger() >= 24 || version.split('\\.')[1].toInteger() > 4
     }
 
