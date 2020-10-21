@@ -20,7 +20,9 @@ enum EVMVersion {
     TANGERINE_WHISTLE('tangerineWhistle'),
     SPURIOUS_DRAGON('spuriousDragon'),
     BYZANTIUM('byzantium'),
-    CONSTANTINOPLE('constantinople')
+    CONSTANTINOPLE('constantinople'),
+    PETERSBURG('petersburg'),
+    ISTANBUL('istanbul')
 
     private String value
 
