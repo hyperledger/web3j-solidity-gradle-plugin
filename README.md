@@ -38,7 +38,10 @@ The properties accepted by the DSL are listed in the following table:
 |----------------------------|:---------------------------:|:-------------------------------------------------:|-----------------------------------------------------------------|
 | `executable`               | `String`                    | `null` (bundled with the plugin)                  | Solidity compiler path.                                         |
 | `version`                  | `String`                    | `0.4.25`                                          | Solidity compiler version.                                      |
-| `overwrite`                | `Boolean`                   | `true`                                            | Overwrite existing files.                                       |
+| `overwrite`                | `Boolean`                   | `true`                                            | Overwrite existing files.  
+
+| `resolvePackages`          | `Boolean`                   | `false`                                           | Resolve third-party contract packages.  
+
 | `optimize`                 | `Boolean`                   | `true`                                            | Enable byte code optimizer.                                     |
 | `optimizeRuns`             | `Integer`                   | `200`                                             | Set for how many contract runs to optimize.                     |
 | `prettyJson`               | `Boolean`                   | `false`                                           | Output JSON in pretty format. Enables the combined JSON output. |
