@@ -36,8 +36,8 @@ class SolidityResolve extends DefaultTask {
     @TaskAction
     void resolveSolidity() {
         Set<String> libraries = []
-        def pathRemappings = (project.extensions.solidity as SolidityExtension).getPathRemappings()
-        def nodeProjectDir = (project.extensions.node as NodeExtension).nodeProjectDir.asFile.get()
+        def pathRemappings = project.solidity.pathRemappings
+        def nodeProjectDir = project.node.nodeProjectDir.asFile.get()
         for (def contract in sources) {
             contract.readLines().forEach { line ->
                 PROVIDERS.forEach { it ->
