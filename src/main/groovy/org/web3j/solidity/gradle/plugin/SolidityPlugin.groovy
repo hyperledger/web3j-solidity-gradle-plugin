@@ -129,11 +129,16 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
         compileTask.description = "Compiles $sourceSet.name Solidity source."
 
-        project.getTasks().named('npmInstall').configure {
-            dependsOn(project.getTasks().named("resolveSolidity"))
+        if (project.solidity.resolvePackages) {
+            project.getTasks().named('npmInstall').configure {
+                it.dependsOn(project.getTasks().named("resolveSolidity"))
+            }
+            compileTask.dependsOn(project.getTasks().named("npmInstall"))
         }
-        compileTask.dependsOn(project.getTasks().named("npmInstall"))
-        project.getTasks().getByName('build') dependsOn(compileTask)
+
+        project.getTasks().named('build').configure {
+            it.dependsOn(compileTask)
+        }
     }
 
     private void configureSolidityResolve(Project target, DirectoryProperty nodeProjectDir) {
@@ -141,7 +146,10 @@ class SolidityPlugin implements Plugin<Project> {
                 "resolveSolidity", SolidityResolve)
         resolveSolidity.sources = resolvedSolidity.solidity
         resolveSolidity.description = "Resolve external Solidity contract modules."
-        resolveSolidity.allowPaths = (target.extensions.solidity as SolidityExtension).getAllowPaths()
+        resolveSolidity.allowPaths = target.solidity.allowPaths
+        resolveSolidity.onlyIf {
+            target.solidity.resolvePackages
+        }
         def packageJson = new File(nodeProjectDir.asFile.get(), "package.json")
         resolveSolidity.packageJson = packageJson
     }

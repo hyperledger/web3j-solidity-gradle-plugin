@@ -113,6 +113,10 @@ class SolidityPluginTest {
             }
             node {
                 nodeProjectDir = file("\$project.rootDir/test")
+                download = true
+            }
+            solidity{
+                resolvePackages = true
             }
             sourceSets {
                main {
@@ -275,6 +279,7 @@ class SolidityPluginTest {
                        exclude "greeter/**"
                        exclude "common/**"
                        exclude "sol5/**"
+                       exclude "openzeppelin/**"
                    }
                }
             }

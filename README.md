@@ -37,8 +37,9 @@ The properties accepted by the DSL are listed in the following table:
 |  Name                      | Type                        | Default value                                     | Description                                                     |
 |----------------------------|:---------------------------:|:-------------------------------------------------:|-----------------------------------------------------------------|
 | `executable`               | `String`                    | `null` (bundled with the plugin)                  | Solidity compiler path.                                         |
-| `version`                  | `String`                    | `0.4.25`                                          | Solidity compiler version.                                      |
+| `version`                  | `String`                    | `null` (defined by contract's pragma)             | Solidity compiler version.                                      |
 | `overwrite`                | `Boolean`                   | `true`                                            | Overwrite existing files.                                       |
+| `resolvePackages`          | `Boolean`                   | `false`                                           | Resolve third-party contract packages.                          |           
 | `optimize`                 | `Boolean`                   | `true`                                            | Enable byte code optimizer.                                     |
 | `optimizeRuns`             | `Integer`                   | `200`                                             | Set for how many contract runs to optimize.                     |
 | `prettyJson`               | `Boolean`                   | `false`                                           | Output JSON in pretty format. Enables the combined JSON output. |
@@ -53,7 +54,6 @@ The properties accepted by the DSL are listed in the following table:
   ```groovy
     solidity {
         executable = "docker run --rm -v $projectDir:/src satran004/aion-fastvm:latest solc"
-        version = '0.4.15'
     }
   ```
   - Use `version` to change the bundled Solidity version. 
@@ -80,6 +80,25 @@ sourceSets {
 }
 ```
 
+## Gradle Node Plugin
+
+The plugin makes use of [gradle-node-plugin](https://github.com/node-gradle/gradle-node-plugin) as a dependency.
+When importing libraries from @openzeppeling/contracts in your solidity contract the plugin will use the task `resolveSolidity` to generate 
+a package.json file in order to be used by gradle-node-plugin. By default package.json will be generated under the `build/` directory.
+If you with do define your own package.json you need to add the following snippet in your `build.gradle` file. 
+
+```
+
+node {
+    nodeProjectDir = file("my_custom_directory")
+}
+
+```
+The plugin will look for the package.json file in the directory set and will also download the node modules under the same directory.
+
+
+
+
 ## Plugin tasks
 
 The [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
@@ -89,7 +108,9 @@ adds tasks to your project build using a naming convention on a per source set b
 Similarly, the Solidity plugin will add a:
 
    * `compileSolidity` task for the project `main` source set.
-   * `compile<SourceSet>Solidity` for each remaining source set 
+   * `compile<SourceSet>Solidity` for each remaining source set.
+   * `resolveSolidity` for every source set.
+
      (e.g. `compileTestSolidity` for the `test` source set, etc.). 
 
 To obtain a list and description of all added tasks, run the command:

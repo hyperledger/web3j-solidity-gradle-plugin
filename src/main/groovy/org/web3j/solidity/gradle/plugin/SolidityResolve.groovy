@@ -26,7 +26,6 @@ class SolidityResolve extends DefaultTask {
 
     private FileTree sources
 
-
     @Input
     @Optional
     private Set<String> allowPaths
