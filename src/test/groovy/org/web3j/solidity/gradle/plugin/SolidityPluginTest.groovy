@@ -113,7 +113,6 @@ class SolidityPluginTest {
             }
             node {
                 nodeProjectDir = file("\$project.rootDir/test")
-                download = true
             }
             solidity{
                 resolvePackages = true

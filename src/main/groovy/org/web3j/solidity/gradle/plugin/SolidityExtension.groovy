@@ -60,7 +60,7 @@ class SolidityExtension {
         this.project = project
         this.executable = null
         this.optimize = true
-        this.resolvePackages = false
+        this.resolvePackages = true
         this.overwrite = true
         this.optimizeRuns = 0
         this.prettyJson = false

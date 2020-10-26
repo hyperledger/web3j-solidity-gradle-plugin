@@ -39,7 +39,7 @@ The properties accepted by the DSL are listed in the following table:
 | `executable`               | `String`                    | `null` (bundled with the plugin)                  | Solidity compiler path.                                         |
 | `version`                  | `String`                    | `null` (defined by contract's pragma)             | Solidity compiler version.                                      |
 | `overwrite`                | `Boolean`                   | `true`                                            | Overwrite existing files.                                       |
-| `resolvePackages`          | `Boolean`                   | `false`                                           | Resolve third-party contract packages.                          |           
+| `resolvePackages`          | `Boolean`                   | `true`                                            | Resolve third-party contract packages.                          |           
 | `optimize`                 | `Boolean`                   | `true`                                            | Enable byte code optimizer.                                     |
 | `optimizeRuns`             | `Integer`                   | `200`                                             | Set for how many contract runs to optimize.                     |
 | `prettyJson`               | `Boolean`                   | `false`                                           | Output JSON in pretty format. Enables the combined JSON output. |
@@ -82,10 +82,14 @@ sourceSets {
 
 ## Gradle Node Plugin
 
-The plugin makes use of [gradle-node-plugin](https://github.com/node-gradle/gradle-node-plugin) as a dependency.
-When importing libraries from @openzeppeling/contracts in your solidity contract the plugin will use the task `resolveSolidity` to generate 
-a package.json file in order to be used by gradle-node-plugin. By default package.json will be generated under the `build/` directory.
-If you with do define your own package.json you need to add the following snippet in your `build.gradle` file. 
+The plugin makes use of the [Node plugin](https://github.com/node-gradle/gradle-node-plugin) to resolve third-party contract dependencies. 
+It currently supports:
+* [Open Zeppelin](https://www.npmjs.com/package/@openzeppelin/contracts) 
+* [Uniswap](https://www.npmjs.com/package/@uniswap/lib) 
+
+When importing libraries from `@openzeppeling/contracts` in your Solidity contract the plugin will use the task `resolveSolidity` to generate 
+a `package.json` file in order to be used by the [Node plugin](https://github.com/node-gradle/gradle-node-plugin). By default, `package.json` will be generated under the `build/` directory.
+If you with do define your own `package.json` you need to add the following snippet in your `build.gradle` file. 
 
 ```
 
@@ -94,7 +98,7 @@ node {
 }
 
 ```
-The plugin will look for the package.json file in the directory set and will also download the node modules under the same directory.
+The plugin will look for the `package.json` file in the directory set and will also download the node modules under the same directory.
 
 
 
@@ -109,7 +113,7 @@ Similarly, the Solidity plugin will add a:
 
    * `compileSolidity` task for the project `main` source set.
    * `compile<SourceSet>Solidity` for each remaining source set.
-   * `resolveSolidity` for every source set.
+   * `resolveSolidity` task for all project Solidity sources.
 
      (e.g. `compileTestSolidity` for the `test` source set, etc.). 
 
