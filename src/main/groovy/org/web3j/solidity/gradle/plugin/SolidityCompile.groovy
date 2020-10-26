@@ -52,7 +52,12 @@ class SolidityCompile extends SourceTask {
 
     @Input
     @Optional
-    private List<String> allowPaths
+    private Set<String> allowPaths
+
+
+    @Input
+    @Optional
+    private Map<String, String> pathRemappings
 
     @Input
     @Optional
@@ -106,6 +111,13 @@ class SolidityCompile extends SourceTask {
                 options.add("--allow-paths")
                 options.add(allowPaths.join(','))
             }
+
+            if (!pathRemappings.isEmpty()) {
+                pathRemappings.forEach { key, value ->
+                    options.add("$key=$value")
+                }
+            }
+
 
             options.add('--output-dir')
             options.add(project.projectDir.relativePath(outputs.files.singleFile))
@@ -225,11 +237,19 @@ class SolidityCompile extends SourceTask {
         this.ignoreMissing = ignoreMissing
     }
 
-    List<String> getAllowPaths() {
+    Map<String, String> getPathRemapping() {
+        return pathRemappings
+    }
+
+    void setPathRemapping(Map<String, String> pathRemapping) {
+        this.pathRemappings = pathRemapping
+    }
+
+    Set<String> getAllowPaths() {
         return allowPaths
     }
 
-    void setAllowPaths(final List<String> allowPaths) {
+    void setAllowPaths(final Set<String> allowPaths) {
         this.allowPaths = allowPaths
     }
 

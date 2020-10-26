@@ -37,6 +37,8 @@ class SolidityExtension {
 
     private Boolean optimize
 
+    private Boolean resolvePackages
+
     private Integer optimizeRuns
 
     private Boolean prettyJson
@@ -44,6 +46,8 @@ class SolidityExtension {
     private Boolean ignoreMissing
 
     private List<String> allowPaths
+
+    private Map<String, String> pathRemappings
 
     private EVMVersion evmVersion
 
@@ -56,11 +60,13 @@ class SolidityExtension {
         this.project = project
         this.executable = null
         this.optimize = true
+        this.resolvePackages = true
         this.overwrite = true
         this.optimizeRuns = 0
         this.prettyJson = false
         this.ignoreMissing = false
         this.allowPaths = []
+        this.pathRemappings = [:]
         this.evmVersion = BYZANTIUM
         this.outputComponents = [
                 OutputComponent.BIN,
@@ -97,6 +103,14 @@ class SolidityExtension {
 
     void setOptimize(final boolean optimize) {
         this.optimize = optimize
+    }
+
+    Boolean getResolvePackages() {
+        return resolvePackages
+    }
+
+    void setResolvePackages(Boolean resolvePackages) {
+        this.resolvePackages = resolvePackages
     }
 
     int getOptimizeRuns() {
@@ -137,6 +151,14 @@ class SolidityExtension {
 
     void setAllowPaths(final List<String> allowPaths) {
         this.allowPaths = allowPaths
+    }
+
+    Map<String, String> getPathRemappings() {
+        return pathRemappings
+    }
+
+    void setPathRemappings(Map<String, String> pathRemappings) {
+        this.pathRemappings = pathRemappings
     }
 
     EVMVersion getEvmVersion() {

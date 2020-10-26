@@ -79,6 +79,7 @@ class SolidityPluginTest {
                        exclude "eip/**"
                        exclude "greeter/**"
                        exclude "common/**"
+                       exclude "openzeppelin/**"
                        exclude "$differentVersionsFolderName/**"
                    }
                }
@@ -105,10 +106,16 @@ class SolidityPluginTest {
     }
 
     @Test
-    void compileSolidityAllowedPath() {
+    void compileSolidityWithLibraryImports() {
         buildFile << """
             plugins {
                id 'org.web3j.solidity'
+            }
+            node {
+                nodeProjectDir = file("\$project.rootDir/test")
+            }
+            solidity{
+                resolvePackages = true
             }
             sourceSets {
                main {
@@ -117,6 +124,7 @@ class SolidityPluginTest {
                        exclude "common/**"
                        exclude "eip/**"
                        exclude "$differentVersionsFolderName/**"
+                       exclude "greeter/**"
                    }
                }
             }
@@ -128,17 +136,18 @@ class SolidityPluginTest {
         def compiledSolDir = new File(testProjectDir.root,
                 "build/resources/main/solidity")
 
-        def compiledAbi = new File(compiledSolDir, "Greeter.abi")
+        def compiledAbi = new File(compiledSolDir, "MyCollectible.abi")
         assertTrue(compiledAbi.exists())
 
-        def compiledBin = new File(compiledSolDir, "Greeter.bin")
+        def compiledBin = new File(compiledSolDir, "MyCollectible.bin")
         assertTrue(compiledBin.exists())
 
-        def excludedAbi = new File(compiledSolDir, "Mortal.abi")
-        assertTrue(excludedAbi.exists())
+        def erc721Abi = new File(compiledSolDir, "ERC721.abi")
+        assertTrue(erc721Abi.exists())
 
         def upToDate = build()
         assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+        assertEquals(UP_TO_DATE, upToDate.task(":resolveSolidity").outcome)
     }
 
     @Test
@@ -156,6 +165,7 @@ class SolidityPluginTest {
                        exclude "sol5/**"
                        exclude "greeter/**"
                        exclude "common/**"
+                       exclude "openzeppelin/**"
                        exclude "$differentVersionsFolderName/**"
                    }
                }
@@ -194,6 +204,7 @@ class SolidityPluginTest {
                        exclude "sol5/**"
                        exclude "greeter/**"
                        exclude "common/**"
+                       exclude "openzeppelin/**"
                        exclude "$differentVersionsFolderName/**"
                    }
                }
@@ -226,6 +237,7 @@ class SolidityPluginTest {
                    solidity {
                        exclude "sol5/**"
                        exclude "eip/**"
+                       exclude "openzeppelin/**"
                        exclude "$differentVersionsFolderName/**"
                    }
                }
@@ -266,6 +278,7 @@ class SolidityPluginTest {
                        exclude "greeter/**"
                        exclude "common/**"
                        exclude "sol5/**"
+                       exclude "openzeppelin/**"
                    }
                }
             }
@@ -281,7 +294,7 @@ class SolidityPluginTest {
                 .withArguments("build")
                 .withPluginClasspath()
                 .forwardOutput()
-                .withDebug(true)
+                .withDebug(false)
                 .build()
     }
 }

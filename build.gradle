@@ -51,6 +51,11 @@ pluginBundle {
         }
     }
 }
+repositories {
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
 
 ext {
     soktVersion = '0.2.1'
@@ -61,6 +66,7 @@ ext {
 
 dependencies {
     implementation "org.web3j:web3j-sokt:$soktVersion"
+    implementation "com.github.node-gradle:gradle-node-plugin:3.0.0-rc2"
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "com.github.stefanbirkner:system-rules:$systemRulesVersion"
