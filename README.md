@@ -113,8 +113,8 @@ adds tasks to your project build using a naming convention on a per source set b
 Similarly, the Solidity plugin will add a:
 
    * `compileSolidity` task for the project `main` source set.
-   * `compile<SourceSet>Solidity` for each remaining source set.
    * `resolveSolidity` task for all project Solidity sources.
+   * `compile<SourceSet>Solidity` for each remaining source set.
 
      (e.g. `compileTestSolidity` for the `test` source set, etc.). 
 

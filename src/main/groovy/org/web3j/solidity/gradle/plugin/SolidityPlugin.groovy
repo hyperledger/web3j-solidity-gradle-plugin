@@ -52,7 +52,6 @@ class SolidityPlugin implements Plugin<Project> {
         final SourceSetContainer sourceSets = target.convention
                 .getPlugin(JavaPluginConvention.class).sourceSets
 
-
         sourceSets.all { SourceSet sourceSet ->
             configureSourceSet(target, sourceSet)
         }
@@ -60,7 +59,6 @@ class SolidityPlugin implements Plugin<Project> {
         def nodeExtension = target.extensions.getByName(NodeExtension.NAME) as NodeExtension
         nodeExtension.nodeProjectDir = target.objects.directoryProperty().convention(target.layout.buildDirectory)
         nodeExtension.download.set(true)
-
 
         target.afterEvaluate {
             sourceSets.all { SourceSet sourceSet ->
