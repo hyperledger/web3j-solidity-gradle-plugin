@@ -45,6 +45,7 @@ The properties accepted by the DSL are listed in the following table:
 | `prettyJson`               | `Boolean`                   | `false`                                           | Output JSON in pretty format. Enables the combined JSON output. |
 | `ignoreMissing`            | `Boolean`                   | `false`                                           | Ignore missing files.                                           |
 | `allowPaths`               | `List<String>`              | `['src/main/solidity', 'src/test/solidity', ...]` | Allow a given path for imports.                                 |
+| `pathRemappings`           | `Map<String,String>`        | `[ : ]`                                           | Remaps contract imports to target path.                         |
 | `evmVersion`               | `EVMVersion`                | `BYZANTIUM`                                       | Select desired EVM version.                                     |
 | `outputComponents`         | `OutputComponent[]`         | `[BIN, ABI]`                                      | List of output components to produce.                           |
 | `combinedOutputComponents` | `CombinedOutputComponent[]` | `[BIN, BIN_RUNTIME, SRCMAP, SRCMAP_RUNTIME]`      | List of output components in combined JSON output.              |
