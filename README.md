@@ -93,7 +93,7 @@ It currently supports:
   * [Open Zeppelin](https://www.npmjs.com/package/@openzeppelin/contracts) 
   * [Uniswap](https://www.npmjs.com/package/@uniswap/lib) 
 
-When importing libraries from `@openzeppeling/contracts` in your Solidity contract the plugin will use the task `resolveSolidity` to generate 
+When importing libraries from `@openzeppelin/contracts` in your Solidity contract the plugin will use the task `resolveSolidity` to generate 
 a `package.json` file in order to be used by the [Node plugin](https://github.com/node-gradle/gradle-node-plugin). By default, `package.json` will be generated under the `build/` directory.
 If you with do define your own `package.json` you need to add the following snippet in your `build.gradle` file. 
 
