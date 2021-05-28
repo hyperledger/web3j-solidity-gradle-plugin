@@ -54,7 +54,6 @@ class SolidityCompile extends SourceTask {
     @Optional
     private Set<String> allowPaths
 
-
     @Input
     @Optional
     private Map<String, String> pathRemappings
@@ -117,7 +116,6 @@ class SolidityCompile extends SourceTask {
                     options.add("$key=$value")
                 }
             }
-
 
             options.add('--output-dir')
             options.add(project.projectDir.relativePath(outputs.files.singleFile))
@@ -193,7 +191,7 @@ class SolidityCompile extends SourceTask {
         this.version = version
     }
 
-    boolean supportsEvmVersionOption(String version) {
+    static boolean supportsEvmVersionOption(String version) {
         return version.split('\\.').last().toInteger() >= 24 || version.split('\\.')[1].toInteger() > 4
     }
 

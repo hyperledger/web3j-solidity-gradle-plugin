@@ -226,6 +226,9 @@ class SolidityPluginTest {
         assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
     }
 
+    /**
+     * Requires a running Docker environment.
+     */
     @Test
     void compileSolidityWithDocker() {
         buildFile << """
