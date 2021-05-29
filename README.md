@@ -109,8 +109,8 @@ node {
 If it already exists, the plugin will keep the `package.json` file in that directory and will also download the node
 modules under the same directory.
 
-**Note:** In case of error with the `package.json` file, you can delete it, and it will be regenerated with the latest
-versions.
+**Note:** In case of problems with the `package.json` file, you can delete it, and it will be regenerated with the
+latest versions.
 
 ## Plugin tasks
 
