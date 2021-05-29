@@ -87,22 +87,30 @@ sourceSets {
 
 ## Gradle Node Plugin
 
-The plugin makes use of the [Node plugin](https://github.com/node-gradle/gradle-node-plugin) to resolve third-party contract dependencies. 
-It currently supports:
+The plugin makes use of the [Node plugin](https://github.com/node-gradle/gradle-node-plugin) to resolve third-party
+contract dependencies. It currently supports:
 
-  * [Open Zeppelin](https://www.npmjs.com/package/@openzeppelin/contracts) 
-  * [Uniswap](https://www.npmjs.com/package/@uniswap/lib) 
+* [Open Zeppelin](https://www.npmjs.com/package/@openzeppelin/contracts)
+* [Uniswap](https://www.npmjs.com/package/@uniswap/lib)
 
-When importing libraries from `@openzeppelin/contracts` in your Solidity contract the plugin will use the task `resolveSolidity` to generate 
-a `package.json` file in order to be used by the [Node plugin](https://github.com/node-gradle/gradle-node-plugin). By default, `package.json` will be generated under the `build/` directory.
-If you with do define your own `package.json` you need to add the following snippet in your `build.gradle` file. 
+When importing libraries from `@openzeppelin/contracts` in your Solidity contract, the plugin will use the
+task `resolveSolidity` to generate a `package.json` file required by
+the [Node plugin](https://github.com/node-gradle/gradle-node-plugin).
+
+By default, `package.json` will be generated under the `build/` directory. If you wish to change the directory for the
+Node plugin, add the following snippet to your `build.gradle` file:
 
 ```
 node {
     nodeProjectDir = file("my/custom/node/directory")
 }
 ```
-The plugin will look for the `package.json` file in the directory set and will also download the node modules under the same directory.
+
+If it already exists, the plugin will keep the `package.json` file in that directory and will also download the node
+modules under the same directory.
+
+**Note:** In case of problems with the `package.json` file, you can delete it, and it will be regenerated with the
+latest versions.
 
 ## Plugin tasks
 
@@ -112,7 +120,7 @@ adds tasks to your project build using a naming convention on a per source set b
 
 Similarly, the Solidity plugin will add a:
 
-   * `resolveSolidity` task for all project Solidity sources.
+* `resolveSolidity` task for all project Solidity sources.
    * `compileSolidity` task for the project `main` source set.
    * `compile<SourceSet>Solidity` for each remaining source set. (e.g. `compileTestSolidity` for the `test` source set, etc.). 
 

@@ -12,7 +12,6 @@
  */
 package org.web3j.solidity.gradle.plugin
 
-import com.github.gradle.node.NodeExtension
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import org.gradle.api.DefaultTask
@@ -64,12 +63,10 @@ class SolidityResolve extends DefaultTask {
         if (!packageJson.exists()) {
             packageJson.parentFile.mkdirs()
             packageJson.createNewFile()
-        } else {
-            packageJson.bytes = []
+            def jsonBuilder = new JsonBuilder()
+            jsonBuilder jsonMap
+            packageJson.append(JsonOutput.prettyPrint(jsonBuilder.toString()) + "\n")
         }
-        def jsonBuilder = new JsonBuilder()
-        jsonBuilder jsonMap
-        packageJson.append(JsonOutput.prettyPrint(jsonBuilder.toString()) + "\n")
     }
 
     @InputFiles
