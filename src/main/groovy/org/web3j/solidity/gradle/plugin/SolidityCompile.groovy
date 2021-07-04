@@ -239,8 +239,8 @@ class SolidityCompile extends SourceTask {
         return pathRemappings
     }
 
-    void setPathRemappings(Map<String, String> pathRemapping) {
-        this.pathRemappings = pathRemapping
+    void setPathRemappings(Map<String, String> pathRemappings) {
+        this.pathRemappings = pathRemappings
     }
 
     Set<String> getAllowPaths() {
