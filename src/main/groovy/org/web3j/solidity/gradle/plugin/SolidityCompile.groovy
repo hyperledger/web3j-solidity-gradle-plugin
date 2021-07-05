@@ -235,12 +235,12 @@ class SolidityCompile extends SourceTask {
         this.ignoreMissing = ignoreMissing
     }
 
-    Map<String, String> getPathRemapping() {
+    Map<String, String> getPathRemappings() {
         return pathRemappings
     }
 
-    void setPathRemapping(Map<String, String> pathRemapping) {
-        this.pathRemappings = pathRemapping
+    void setPathRemappings(Map<String, String> pathRemappings) {
+        this.pathRemappings = pathRemappings
     }
 
     Set<String> getAllowPaths() {
