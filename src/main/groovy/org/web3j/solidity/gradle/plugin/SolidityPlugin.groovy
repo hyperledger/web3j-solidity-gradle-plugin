@@ -115,7 +115,7 @@ class SolidityPlugin implements Plugin<Project> {
             // Leave executable as specified by the user
             compileTask.executable = project.solidity.executable
         }
-        compileTask.pathRemapping = project.solidity.pathRemappings
+        compileTask.pathRemappings = project.solidity.pathRemappings
         compileTask.version = project.solidity.version
         compileTask.source = soliditySourceSet.solidity
         compileTask.outputComponents = project.solidity.outputComponents
