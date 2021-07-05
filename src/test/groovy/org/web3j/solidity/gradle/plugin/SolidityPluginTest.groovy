@@ -74,15 +74,15 @@ class SolidityPluginTest {
                id 'org.web3j.solidity'
             }
             sourceSets {
-               main {
-                   solidity {
-                       exclude "eip/**"
-                       exclude "greeter/**"
-                       exclude "common/**"
-                       exclude "openzeppelin/**"
-                       exclude "$differentVersionsFolderName/**"
-                   }
-               }
+                main {
+                    solidity {
+                        exclude "eip/**"
+                        exclude "greeter/**"
+                        exclude "common/**"
+                        exclude "openzeppelin/**"
+                        exclude "$differentVersionsFolderName/**"
+                    }
+                }
             }
         """
 
@@ -114,19 +114,19 @@ class SolidityPluginTest {
             node {
                 nodeProjectDir = file("\$project.rootDir/test")
             }
-            solidity{
+            solidity {
                 resolvePackages = true
             }
             sourceSets {
-               main {
-                   solidity {
-                       exclude "sol5/**"
-                       exclude "common/**"
-                       exclude "eip/**"
-                       exclude "$differentVersionsFolderName/**"
-                       exclude "greeter/**"
-                   }
-               }
+                main {
+                    solidity {
+                        exclude "sol5/**"
+                        exclude "common/**"
+                        exclude "eip/**"
+                        exclude "$differentVersionsFolderName/**"
+                        exclude "greeter/**"
+                    }
+                }
             }
         """
 
@@ -199,15 +199,15 @@ class SolidityPluginTest {
                 executable = 'solc'
             }
             sourceSets {
-               main {
-                   solidity {
-                       exclude "sol5/**"
-                       exclude "greeter/**"
-                       exclude "common/**"
-                       exclude "openzeppelin/**"
-                       exclude "$differentVersionsFolderName/**"
-                   }
-               }
+                main {
+                    solidity {
+                        exclude "sol5/**"
+                        exclude "greeter/**"
+                        exclude "common/**"
+                        exclude "openzeppelin/**"
+                        exclude "$differentVersionsFolderName/**"
+                    }
+                }
             }
         """
         def success = build()
@@ -236,14 +236,14 @@ class SolidityPluginTest {
                id 'org.web3j.solidity'
             }
             sourceSets {
-               main {
-                   solidity {
-                       exclude "sol5/**"
-                       exclude "eip/**"
-                       exclude "openzeppelin/**"
-                       exclude "$differentVersionsFolderName/**"
-                   }
-               }
+                main {
+                    solidity {
+                        exclude "sol5/**"
+                        exclude "eip/**"
+                        exclude "openzeppelin/**"
+                        exclude "$differentVersionsFolderName/**"
+                    }
+                }
             }
             solidity {
                 executable = 'docker run --rm -v $testProjectDir.root:/src satran004/aion-fastvm:0.3.1 solc'
@@ -275,15 +275,15 @@ class SolidityPluginTest {
                id 'org.web3j.solidity'
             }
             sourceSets {
-               main {
-                   solidity {
-                       exclude "eip/**"
-                       exclude "greeter/**"
-                       exclude "common/**"
-                       exclude "sol5/**"
-                       exclude "openzeppelin/**"
-                   }
-               }
+                main {
+                    solidity {
+                        exclude "eip/**"
+                        exclude "greeter/**"
+                        exclude "common/**"
+                        exclude "sol5/**"
+                        exclude "openzeppelin/**"
+                    }
+                }
             }
         """
 
