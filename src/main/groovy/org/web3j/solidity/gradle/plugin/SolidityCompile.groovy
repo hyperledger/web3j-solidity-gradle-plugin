@@ -111,8 +111,11 @@ class SolidityCompile extends SourceTask {
                 options.add(allowPaths.join(','))
             }
 
-            if (!pathRemappings.isEmpty()) {
-                pathRemappings.forEach { key, value ->
+            final File nodeProjectDir = project.node.nodeProjectDir.asFile.get()
+            def allPathRemappings = pathRemappings + ImportsResolver.instance.resolveImports(contract, nodeProjectDir)
+
+            if (!allPathRemappings.isEmpty()) {
+                allPathRemappings.forEach { key, value ->
                     options.add("$key=$value")
                 }
             }
@@ -128,8 +131,11 @@ class SolidityCompile extends SourceTask {
 
             if (compilerExecutable == null) {
                 if (compilerVersion != null) {
-                    def resolvedVersion = new VersionResolver(".web3j").getSolcReleases().stream().filter({ i -> i.version == version && i.isCompatibleWithOs() }).findAny().orElseThrow {
-                        return new Exception("Failed to resolve Solidity version $version from available versions. You may need to use a custom executable instead.")
+                    def resolvedVersion = new VersionResolver(".web3j").getSolcReleases().stream().filter {
+                        it.version == version && it.isCompatibleWithOs()
+                    }.findAny().orElseThrow {
+                        return new Exception("Failed to resolve Solidity version $version from available versions. " +
+                                "You may need to use a custom executable instead.")
                     }
                     compilerInstance = new SolcInstance(resolvedVersion, ".web3j", false)
                 } else {
@@ -148,7 +154,8 @@ class SolidityCompile extends SourceTask {
             }
 
             if (Paths.get(compilerExecutable).toFile().exists()) {
-                // if the executable string is a file which exists, it may be a direct reference to the solc executable with a space in the path (Windows)
+                // if the executable string is a file which exists, it may be a direct reference
+                // to the solc executable with a space in the path (Windows)
                 project.exec {
                     executable = compilerExecutable
                     args = options

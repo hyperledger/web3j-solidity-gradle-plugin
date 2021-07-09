@@ -89,9 +89,7 @@ class SolidityPluginTest {
         def success = build()
         assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
 
-        def compiledSolDir = new File(testProjectDir.root,
-                "build/resources/main/solidity")
-
+        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
         def compiledAbi = new File(compiledSolDir, "Greeter.abi")
         assertTrue(compiledAbi.exists())
 
@@ -114,9 +112,6 @@ class SolidityPluginTest {
             node {
                 nodeProjectDir = file("\$project.rootDir/test")
             }
-            solidity {
-                resolvePackages = true
-            }
             sourceSets {
                 main {
                     solidity {
@@ -133,9 +128,7 @@ class SolidityPluginTest {
         def success = build()
         assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
 
-        def compiledSolDir = new File(testProjectDir.root,
-                "build/resources/main/solidity")
-
+        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
         def compiledAbi = new File(compiledSolDir, "MyCollectible.abi")
         assertTrue(compiledAbi.exists())
 
@@ -175,9 +168,7 @@ class SolidityPluginTest {
         def success = build()
         assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
 
-        def compiledSolDir = new File(testProjectDir.root,
-                "build/resources/main/solidity")
-
+        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
         def compiledAbi = new File(compiledSolDir, "EIP20.abi")
         assertTrue(compiledAbi.exists())
 
@@ -213,9 +204,7 @@ class SolidityPluginTest {
         def success = build()
         assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
 
-        def compiledSolDir = new File(testProjectDir.root,
-                "build/resources/main/solidity")
-
+        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
         def compiledAbi = new File(compiledSolDir, "EIP20.abi")
         assertTrue(compiledAbi.exists())
 
@@ -255,9 +244,7 @@ class SolidityPluginTest {
         def success = build()
         assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
 
-        def compiledSolDir = new File(testProjectDir.root,
-                "build/resources/main/solidity")
-
+        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
         def compiledAbi = new File(compiledSolDir, "Greeter.abi")
         assertTrue(compiledAbi.exists())
 
@@ -294,10 +281,10 @@ class SolidityPluginTest {
     private BuildResult build() {
         return GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
-                .withArguments("build")
+                .withArguments("build", "--info")
                 .withPluginClasspath()
                 .forwardOutput()
-                .withDebug(false)
+                .withDebug(true)
                 .build()
     }
 }

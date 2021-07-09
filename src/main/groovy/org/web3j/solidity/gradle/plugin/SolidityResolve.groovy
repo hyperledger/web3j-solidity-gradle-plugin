@@ -21,34 +21,24 @@ import org.gradle.api.tasks.*
 @CacheableTask
 class SolidityResolve extends DefaultTask {
 
-    private static Set<String> PROVIDERS = ["@openzeppelin/contracts", "@uniswap/lib"]
-
     private FileTree sources
 
-    @Input
-    @Optional
     private Set<String> allowPaths
 
     private File packageJson
 
-
     @TaskAction
     void resolveSolidity() {
-        Set<String> libraries = []
-        def pathRemappings = project.solidity.pathRemappings
-        def nodeProjectDir = project.node.nodeProjectDir.asFile.get()
+        final Set<String> libraries = []
+        final File nodeProjectDir = project.node.nodeProjectDir.asFile.get()
+
         for (def contract in sources) {
-            contract.readLines().forEach { line ->
-                PROVIDERS.forEach { it ->
-                    if (line.contains(it)) {
-                        libraries.add(it)
-                        pathRemappings.put(it, "$nodeProjectDir.path/node_modules/$it")
-                        allowPaths.add("$nodeProjectDir.path/node_modules/$it")
-                    }
-                }
+            def imports = ImportsResolver.instance.resolveImports(contract, nodeProjectDir)
+            for (provider in imports.keySet()) {
+                libraries.add(provider)
+                allowPaths.add("$nodeProjectDir.path/node_modules/$provider")
             }
         }
-
 
         def jsonMap = [
                 "name"        : project.name,
@@ -71,7 +61,6 @@ class SolidityResolve extends DefaultTask {
 
     @InputFiles
     @SkipWhenEmpty
-    @PathSensitive(PathSensitivity.ABSOLUTE)
     FileTree getSources() {
         return sources
     }
@@ -79,7 +68,6 @@ class SolidityResolve extends DefaultTask {
     void setSources(FileTree sources) {
         this.sources = sources
     }
-
 
     @OutputFile
     File getPackageJson() {
@@ -90,6 +78,8 @@ class SolidityResolve extends DefaultTask {
         this.packageJson = packageJson
     }
 
+    @Input
+    @Optional
     Set<String> getAllowPaths() {
         return allowPaths
     }
@@ -97,6 +87,4 @@ class SolidityResolve extends DefaultTask {
     void setAllowPaths(Set<String> allowPaths) {
         this.allowPaths = allowPaths
     }
-
-
 }

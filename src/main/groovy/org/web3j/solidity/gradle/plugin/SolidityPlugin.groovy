@@ -62,7 +62,7 @@ class SolidityPlugin implements Plugin<Project> {
 
         target.afterEvaluate {
             sourceSets.all { SourceSet sourceSet ->
-                configureTask(target, sourceSet)
+                configureSolidityCompile(target, sourceSet)
                 configureAllowPath(target, sourceSet)
                 sourceSet.allSource.srcDirs.forEach {
                     resolvedSolidity.solidity.srcDir(it)
@@ -100,15 +100,10 @@ class SolidityPlugin implements Plugin<Project> {
      * is <code>compileSolidity</code> and for <code>test</code>
      * <code>compileTestSolidity</code>.
      */
-    private void configureTask(final Project project, final SourceSet sourceSet) {
+    private static void configureSolidityCompile(final Project project, final SourceSet sourceSet) {
 
-        def srcSetName = sourceSet.name == 'main' ?
-                '' : capitalize((CharSequence) sourceSet.name)
-
-        def compileTask = project.tasks.create(
-                "compile${srcSetName}Solidity", SolidityCompile)
-
-
+        def srcSetName = sourceSet.name == 'main' ? '' : capitalize((CharSequence) sourceSet.name)
+        def compileTask = project.tasks.create("compile${srcSetName}Solidity", SolidityCompile)
         def soliditySourceSet = sourceSet.convention.plugins[NAME] as SoliditySourceSet
 
         if (!requiresBundledExecutable(project)) {
@@ -143,14 +138,12 @@ class SolidityPlugin implements Plugin<Project> {
     }
 
     private void configureSolidityResolve(Project target, DirectoryProperty nodeProjectDir) {
-        def resolveSolidity = target.tasks.create(
-                "resolveSolidity", SolidityResolve)
+        def resolveSolidity = target.tasks.create("resolveSolidity", SolidityResolve)
         resolveSolidity.sources = resolvedSolidity.solidity
         resolveSolidity.description = "Resolve external Solidity contract modules."
         resolveSolidity.allowPaths = target.solidity.allowPaths
-        resolveSolidity.onlyIf {
-            target.solidity.resolvePackages
-        }
+        resolveSolidity.onlyIf { target.solidity.resolvePackages }
+
         def packageJson = new File(nodeProjectDir.asFile.get(), "package.json")
         resolveSolidity.packageJson = packageJson
     }
