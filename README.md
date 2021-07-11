@@ -68,9 +68,9 @@ solidity {
 
 ## Source sets
 
-By default, all `.sol` files in `$projectDir/src/main/solidity` will be processed by the plugin.
-To specify and add different source sets, use the `sourceSets` DSL. You can also set your preferred
-output directory for compiled code.
+By default, all `.sol` files in `$projectDir/src/main/solidity` and `$projectDir/src/test/solidity` will be processed by
+the plugin. To specify and add different source sets, use the `sourceSets` DSL. You can also set your preferred output
+directory for compiled code.
 
 ```groovy
 sourceSets {
@@ -88,10 +88,8 @@ sourceSets {
 ## Gradle Node Plugin
 
 The plugin makes use of the [Node plugin](https://github.com/node-gradle/gradle-node-plugin) to resolve third-party
-contract dependencies. It currently supports:
-
-* [Open Zeppelin](https://www.npmjs.com/package/@openzeppelin/contracts)
-* [Uniswap](https://www.npmjs.com/package/@uniswap/lib)
+contract dependencies. It currently supports [Open Zeppelin](https://www.npmjs.com/package/@openzeppelin/contracts)
+and [Uniswap](https://www.npmjs.com/package/@uniswap/lib).
 
 When importing libraries from `@openzeppelin/contracts` in your Solidity contract, the plugin will use the
 task `resolveSolidity` to generate a `package.json` file required by
@@ -118,11 +116,12 @@ The [Java Plugin](https://docs.gradle.org/current/userguide/java_plugin.html)
 adds tasks to your project build using a naming convention on a per source set basis
 (i.e. `compileJava`, `compileTestJava`).
 
-Similarly, the Solidity plugin will add a:
+Similarly, the Solidity plugin will add the tasks:
 
 * `resolveSolidity` task for all project Solidity sources.
-   * `compileSolidity` task for the project `main` source set.
-   * `compile<SourceSet>Solidity` for each remaining source set. (e.g. `compileTestSolidity` for the `test` source set, etc.). 
+* `compileSolidity` task for the project `main` source set.
+* `compile<SourceSet>Solidity` for each remaining source set. (e.g. `compileTestSolidity` for the `test` source set,
+  etc.).
 
 To obtain a list and description of all added tasks, run the command:
 
