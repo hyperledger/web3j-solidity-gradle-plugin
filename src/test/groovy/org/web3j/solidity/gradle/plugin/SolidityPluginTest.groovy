@@ -84,6 +84,13 @@ class SolidityPluginTest {
                     }
                 }
             }
+            tasks {
+                jar {
+                    // deal with implicit dependendency issue so that
+                    // compileSolidity can be "UP-TO-DATE" when re-ran
+                    mustRunAfter "compileSolidity"
+                }
+            }
         """
 
         def success = build()
@@ -121,6 +128,13 @@ class SolidityPluginTest {
                         exclude "$differentVersionsFolderName/**"
                         exclude "greeter/**"
                     }
+                }
+            }
+            tasks {
+                jar {
+                    // deal with implicit dependendency issue so that
+                    // compileSolidity can be "UP-TO-DATE" when re-ran
+                    mustRunAfter "compileSolidity"
                 }
             }
         """
@@ -162,6 +176,13 @@ class SolidityPluginTest {
                        exclude "$differentVersionsFolderName/**"
                    }
                }
+            }
+            tasks {
+                jar {
+                    // deal with implicit dependendency issue so that
+                    // compileSolidity can be "UP-TO-DATE" when re-ran
+                    mustRunAfter "compileSolidity"
+                }
             }
         """
 
@@ -239,6 +260,13 @@ class SolidityPluginTest {
                 allowPaths = ['/src/src/main/solidity']
                 version = '0.4.15'
             }
+            tasks {
+                jar {
+                    // deal with implicit dependendency issue so that
+                    // compileSolidity can be "UP-TO-DATE" when re-ran
+                    mustRunAfter "compileSolidity"
+                }
+            }
         """
 
         def success = build()
@@ -270,6 +298,13 @@ class SolidityPluginTest {
                         exclude "sol5/**"
                         exclude "openzeppelin/**"
                     }
+                }
+            }
+            tasks {
+                jar {
+                    // deal with implicit dependendency issue so that
+                    // compileSolidity can be "UP-TO-DATE" when re-ran
+                    mustRunAfter "compileSolidity"
                 }
             }
         """
