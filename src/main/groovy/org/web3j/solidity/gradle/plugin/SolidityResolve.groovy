@@ -60,6 +60,7 @@ class SolidityResolve extends DefaultTask {
     }
 
     @InputFiles
+    @PathSensitive(value = PathSensitivity.RELATIVE)
     @SkipWhenEmpty
     FileTree getSources() {
         return sources
