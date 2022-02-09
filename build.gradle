@@ -11,16 +11,16 @@ plugins {
 
 apply {
     [
-        'jacoco',
-        'java',
-        'javadoc',
-        'repositories',
-        'spotless'
+            'jacoco',
+            'java',
+            'javadoc',
+            'repositories',
+            'spotless'
     ].each { buildScript ->
         download {
             src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
             dest "$rootDir/gradle/$buildScript/build.gradle"
-            overwrite true
+            overwrite false
             quiet true
             onlyIfModified true
         }
@@ -62,11 +62,12 @@ ext {
     junitVersion = '4.13'
     assertjVersion = '3.17.1'
     systemRulesVersion = '1.19.0'
+    nodePluginVersion = '3.2.0'
 }
 
 dependencies {
     implementation "org.web3j:web3j-sokt:$soktVersion"
-    implementation "com.github.node-gradle:gradle-node-plugin:3.0.0-rc2"
+    implementation "com.github.node-gradle:gradle-node-plugin:$nodePluginVersion"
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "com.github.stefanbirkner:system-rules:$systemRulesVersion"
