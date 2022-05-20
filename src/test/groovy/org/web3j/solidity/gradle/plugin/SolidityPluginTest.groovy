@@ -219,6 +219,7 @@ class SolidityPluginTest {
      * Requires a running Docker environment.
      */
     @Test
+    @Ignore("This is cool but fails if docker is not running. // Needs to be solved in the CI")
     void compileSolidityWithDocker() {
         buildFile << """
             plugins {
