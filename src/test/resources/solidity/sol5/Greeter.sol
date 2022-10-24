@@ -2,13 +2,13 @@ pragma solidity >=0.8.0 <0.9.0;
 
 contract Mortal {
     /* Define variable owner of the type address */
-    address owner;
+    address payable owner;
 
     /* This constructor is executed at initialization and sets the owner of the contract */
-    constructor() public { owner = msg.sender; }
+    constructor() { owner = payable(msg.sender); }
 
     /* Function to recover the funds on the contract */
-    function kill() public { if (msg.sender == owner) selfdestruct(msg.sender); }
+    function kill() public { if (msg.sender == owner) selfdestruct(payable(msg.sender)); }
 }
 
 contract Greeter is Mortal {
@@ -16,7 +16,7 @@ contract Greeter is Mortal {
     string greeting;
 
     /* This runs when the contract is executed */
-    constructor(string memory _greeting) public {
+    constructor(string memory _greeting) {
         greeting = _greeting;
     }
 

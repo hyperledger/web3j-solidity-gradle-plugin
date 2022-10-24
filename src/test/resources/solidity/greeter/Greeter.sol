@@ -10,16 +10,16 @@ contract Greeter is Mortal {
     string greeting;
 
     /* this runs when the contract is executed */
-    function Greeter(string _greeting) public {
+    constructor(string memory _greeting) {
         greeting = _greeting;
     }
 
-    function newGreeting(string _greeting) public {
+    function newGreeting(string memory _greeting) public {
         greeting = _greeting;
     }
 
     /* main function */
-    function greet() public returns (string) {
+    function greet() public view returns (string memory) {
         return greeting;
     }
 }

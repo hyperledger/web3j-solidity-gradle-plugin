@@ -5,8 +5,12 @@ contract Mortal {
     address owner;
 
     /* This constructor is executed at initialization and sets the owner of the contract */
-    constructor() public { owner = msg.sender; }
+    constructor() { owner = msg.sender; }
 
+    /* TODO 
+    consider to move to openzepeelin pausable, see context on issue: 
+    https://ethereum.stackexchange.com/questions/65872/invalid-type-for-argument-in-function-call-invalid-implicit-conversion-from-add
+    */
     /* Function to recover the funds on the contract */
     function kill() public { if (msg.sender == owner) selfdestruct(msg.sender); }
 }
@@ -16,7 +20,7 @@ contract Greeter is Mortal {
     string greeting;
 
     /* This runs when the contract is executed */
-    constructor(string memory _greeting) public {
+    constructor(string memory _greeting) {
         greeting = _greeting;
     }
 

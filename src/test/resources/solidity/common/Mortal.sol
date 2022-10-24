@@ -2,11 +2,15 @@ pragma solidity ^0.8.4;
 
 contract Mortal {
     /* Define variable owner of the type address*/
-    address owner;
+    address payable owner;
 
     /* this function is executed at initialization and sets the owner of the contract */
-    function Mortal() public {owner = msg.sender;}
+    constructor () {owner = payable(msg.sender);}
 
-    /* Function to recover the funds on the contract */
+    /* TODO 
+    consider to move to openzepeelin pausable, see context on issue: 
+    https://ethereum.stackexchange.com/questions/65872/invalid-type-for-argument-in-function-call-invalid-implicit-conversion-from-add
+    */
+    /* Function to recover the funds on the contract */ 
     function kill() public {if (msg.sender == owner) selfdestruct(owner);}
 }
