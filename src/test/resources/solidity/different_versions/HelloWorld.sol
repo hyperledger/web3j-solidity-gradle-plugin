@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.7.0;
+pragma solidity ^0.8.0;
 
 // Modified Greeter contract. Based on example at https://www.ethereum.org/greeter.
 

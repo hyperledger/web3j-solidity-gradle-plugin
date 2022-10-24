@@ -1,4 +1,4 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.8.4;
 
 // Example taken from https://www.ethereum.org/greeter, also used in
 // https://github.com/ethereum/go-ethereum/wiki/Contract-Tutorial#your-first-citizen-the-greeter
