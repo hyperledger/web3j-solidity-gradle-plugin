@@ -17,7 +17,7 @@ import org.gradle.api.Project
 
 import javax.inject.Inject
 
-import static EVMVersion.LONDON
+import static EVMVersion.BERLIN
 
 /**
  * Extension for Solidity compilation options.
@@ -67,7 +67,7 @@ class SolidityExtension {
         this.ignoreMissing = false
         this.allowPaths = []
         this.pathRemappings = [:]
-        this.evmVersion = LONDON
+        this.evmVersion = BERLIN
         this.outputComponents = [
                 OutputComponent.BIN,
                 OutputComponent.ABI,

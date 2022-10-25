@@ -150,7 +150,7 @@ class SolidityPluginTest {
                id 'org.web3j.solidity'
             }
             solidity {
-                version = '0.8.4'
+                version = '0.8.7'
             }
             sourceSets {
                main {
