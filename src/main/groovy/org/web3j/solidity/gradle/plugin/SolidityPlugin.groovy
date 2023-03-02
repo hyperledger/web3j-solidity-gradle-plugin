@@ -17,7 +17,7 @@ import com.github.gradle.node.NodePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.internal.file.SourceDirectorySetFactory
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
@@ -33,12 +33,12 @@ import static org.web3j.solidity.gradle.plugin.SoliditySourceSet.NAME
  */
 class SolidityPlugin implements Plugin<Project> {
 
-    private final SourceDirectorySetFactory sourceFactory
+    private final ObjectFactory objectFactory;
     private final SoliditySourceSet resolvedSolidity
 
     @Inject
-    SolidityPlugin(final SourceDirectorySetFactory sourceFactory) {
-        this.sourceFactory = sourceFactory
+    SolidityPlugin(final ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory
         this.resolvedSolidity = new DefaultSoliditySourceSet("All", sourceFactory)
     }
 
