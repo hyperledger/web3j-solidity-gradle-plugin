@@ -33,9 +33,10 @@ class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
     DefaultSoliditySourceSet(
             final String displayName,
             final ObjectFactory objectFactory) {
-        solidity = objectFactory.sourceDirectorySet(NAME, displayName + " Solidity Sources")
+        final String sourceDirectoryDisplayName = displayName + " Solidity Sources"
+        solidity = objectFactory.sourceDirectorySet(NAME, sourceDirectoryDisplayName)
         solidity.getFilter().include("**/*.sol")
-        allSolidity = objectFactory.sourceDirectorySet(NAME, displayName + " Solidity Sources")
+        allSolidity = objectFactory.sourceDirectorySet(sourceDirectoryDisplayName, sourceDirectoryDisplayName)
         allSolidity.getFilter().include("**/*.sol")
         allSolidity.source(solidity)
     }
