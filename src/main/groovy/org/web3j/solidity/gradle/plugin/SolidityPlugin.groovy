@@ -39,7 +39,7 @@ class SolidityPlugin implements Plugin<Project> {
     @Inject
     SolidityPlugin(final ObjectFactory objectFactory) {
         this.objectFactory = objectFactory
-        this.resolvedSolidity = new DefaultSoliditySourceSet("All", sourceFactory)
+        this.resolvedSolidity = new DefaultSoliditySourceSet("All", objectFactory)
     }
 
     @Override
@@ -78,7 +78,7 @@ class SolidityPlugin implements Plugin<Project> {
     private void configureSourceSet(final Project project, final SourceSet sourceSet) {
 
         def srcSetName = capitalize((CharSequence) sourceSet.name)
-        def soliditySourceSet = new DefaultSoliditySourceSet(srcSetName, sourceFactory)
+        def soliditySourceSet = new DefaultSoliditySourceSet(srcSetName, objectFactory)
 
         sourceSet.convention.plugins.put(NAME, soliditySourceSet)
 
