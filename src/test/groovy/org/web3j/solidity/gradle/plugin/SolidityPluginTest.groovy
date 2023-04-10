@@ -76,6 +76,7 @@ class SolidityPluginTest {
             sourceSets {
                 main {
                     solidity {
+                        exclude "minimal_forwarder/**"
                         exclude "eip/**"
                         exclude "greeter/**"
                         exclude "common/**"
@@ -115,6 +116,7 @@ class SolidityPluginTest {
             sourceSets {
                 main {
                     solidity {
+                        exclude "minimal_forwarder/**"
                         exclude "sol5/**"
                         exclude "common/**"
                         exclude "eip/**"
@@ -155,6 +157,7 @@ class SolidityPluginTest {
             sourceSets {
                main {
                    solidity {
+                       exclude "minimal_forwarder/**"
                        exclude "sol5/**"
                        exclude "greeter/**"
                        exclude "common/**"
@@ -180,6 +183,43 @@ class SolidityPluginTest {
     }
 
     @Test
+    void compileSolidityWithEvmVersion() {
+        buildFile << """
+            plugins {
+               id 'org.web3j.solidity'
+            }
+            solidity {
+                evmVersion = 'ISTANBUL'
+            }
+            sourceSets {
+               main {
+                   solidity {
+                       exclude "sol5/**"
+                       exclude "eip/**"
+                       exclude "greeter/**"
+                       exclude "common/**"
+                       exclude "openzeppelin/**"
+                       exclude "$differentVersionsFolderName/**"
+                   }
+               }
+            }
+        """
+
+        def success = build()
+        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+
+        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
+        def compiledAbi = new File(compiledSolDir, "MinimalForwarder.abi")
+        assertTrue(compiledAbi.exists())
+
+        def compiledBin = new File(compiledSolDir, "MinimalForwarder.bin")
+        assertTrue(compiledBin.exists())
+
+        def upToDate = build()
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+    }
+
+    @Test
     @Ignore("Requires a specific solc version on the machine to pass")
     void compileSolidityWithExecutable() {
         buildFile << """
@@ -192,6 +232,7 @@ class SolidityPluginTest {
             sourceSets {
                 main {
                     solidity {
+                        exclude "minimal_forwarder/**"
                         exclude "sol5/**"
                         exclude "greeter/**"
                         exclude "common/**"
@@ -228,6 +269,7 @@ class SolidityPluginTest {
             sourceSets {
                 main {
                     solidity {
+                        exclude "minimal_forwarder/**"
                         exclude "sol5/**"
                         exclude "eip/**"
                         exclude "openzeppelin/**"
@@ -265,6 +307,7 @@ class SolidityPluginTest {
             sourceSets {
                 main {
                     solidity {
+                        exclude "minimal_forwarder/**"
                         exclude "eip/**"
                         exclude "greeter/**"
                         exclude "common/**"

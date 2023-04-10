@@ -22,7 +22,9 @@ enum EVMVersion {
     BYZANTIUM('byzantium'),
     CONSTANTINOPLE('constantinople'),
     PETERSBURG('petersburg'),
-    ISTANBUL('istanbul')
+    ISTANBUL('istanbul'),
+    BERLIN('berlin'),
+    LONDON('london')
 
     private String value
 
