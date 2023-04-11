@@ -17,8 +17,6 @@ import org.gradle.api.Project
 
 import javax.inject.Inject
 
-import static EVMVersion.BYZANTIUM
-
 /**
  * Extension for Solidity compilation options.
  */
@@ -67,7 +65,7 @@ class SolidityExtension {
         this.ignoreMissing = false
         this.allowPaths = []
         this.pathRemappings = [:]
-        this.evmVersion = BYZANTIUM
+        this.evmVersion = null
         this.outputComponents = [
                 OutputComponent.BIN,
                 OutputComponent.ABI,
