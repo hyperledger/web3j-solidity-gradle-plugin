@@ -58,11 +58,11 @@ repositories {
 }
 
 ext {
-    soktVersion = '0.2.2'
+    soktVersion = '0.2.3'
     junitVersion = '4.13'
     assertjVersion = '3.17.1'
     systemRulesVersion = '1.19.0'
-    nodePluginVersion = '3.3.0'
+    nodePluginVersion = '3.5.1'
 }
 
 dependencies {
