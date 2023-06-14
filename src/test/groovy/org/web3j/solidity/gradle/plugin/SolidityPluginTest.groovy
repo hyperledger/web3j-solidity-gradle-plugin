@@ -329,7 +329,6 @@ class SolidityPluginTest {
                 .withPluginClasspath()
                 .forwardOutput()
                 .withDebug(true)
-        .
                 .build()
     }
 }
