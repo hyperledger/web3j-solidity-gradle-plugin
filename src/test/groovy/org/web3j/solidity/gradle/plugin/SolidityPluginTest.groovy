@@ -84,6 +84,7 @@ class SolidityPluginTest {
                         exclude "$differentVersionsFolderName/**"
                     }
                 }
+            tasks.named("jar").configure { dependsOn("compileSolidity") }
             }
         """
 
@@ -125,6 +126,7 @@ class SolidityPluginTest {
                     }
                 }
             }
+            tasks.named("jar").configure { dependsOn("compileSolidity") }
         """
 
         def success = build()
@@ -152,7 +154,7 @@ class SolidityPluginTest {
                id 'org.web3j.solidity'
             }
             solidity {
-                version = '0.4.25'
+                version = '0.8.7'
             }
             sourceSets {
                main {
@@ -165,6 +167,7 @@ class SolidityPluginTest {
                        exclude "$differentVersionsFolderName/**"
                    }
                }
+            tasks.named("jar").configure { dependsOn("compileSolidity") }
             }
         """
 
@@ -202,6 +205,7 @@ class SolidityPluginTest {
                        exclude "$differentVersionsFolderName/**"
                    }
                }
+            tasks.named("jar").configure { dependsOn("compileSolidity") }
             }
         """
 
