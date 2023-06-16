@@ -1,6 +1,5 @@
 plugins {
     id 'idea'
-    id 'maven'
     id 'maven-publish'
     id 'groovy'
     id 'java-gradle-plugin'
@@ -58,11 +57,11 @@ repositories {
 }
 
 ext {
-    soktVersion = '0.2.3'
+    soktVersion = '0.2.4'
     junitVersion = '4.13'
     assertjVersion = '3.17.1'
     systemRulesVersion = '1.19.0'
-    nodePluginVersion = '3.5.1'
+    nodePluginVersion = '5.0.0'
 }
 
 dependencies {

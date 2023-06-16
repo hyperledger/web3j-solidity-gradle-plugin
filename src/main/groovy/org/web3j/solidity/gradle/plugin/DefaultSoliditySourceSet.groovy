@@ -16,6 +16,7 @@ import groovy.transform.CompileStatic
 import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.SourceDirectorySetFactory
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.reflect.HasPublicType
 import org.gradle.api.reflect.TypeOf
 import org.gradle.util.ConfigureUtil
@@ -31,11 +32,12 @@ class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
 
     DefaultSoliditySourceSet(
             final String displayName,
-            final SourceDirectorySetFactory setFactory) {
+            final ObjectFactory objectFactory) {
 
-        solidity = setFactory.create(NAME, displayName + " Solidity Sources")
+        final String sourceDirectoryDisplayName = displayName + " Solidity Sources"
+        solidity = objectFactory.sourceDirectorySet(NAME, sourceDirectoryDisplayName)
         solidity.getFilter().include("**/*.sol")
-        allSolidity = setFactory.create(displayName + " Solidity Sources")
+        allSolidity = objectFactory.sourceDirectorySet(sourceDirectoryDisplayName, sourceDirectoryDisplayName)
         allSolidity.getFilter().include("**/*.sol")
         allSolidity.source(solidity)
     }
