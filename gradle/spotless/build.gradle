@@ -1,5 +1,5 @@
 
-apply plugin: 'com.diffplug.gradle.spotless'
+apply plugin: 'com.diffplug.spotless'
 apply plugin: "de.undercouch.download"
 
 task downloadJavaLicense(type: Download) {
@@ -26,7 +26,7 @@ spotless {
             exclude '**/build/install/**'
         }
         removeUnusedImports()
-        googleJavaFormat("1.7").aosp()
+        googleJavaFormat().aosp()
         importOrder 'java', '', 'org.web3j', '\\#'
         trimTrailingWhitespace()
         endWithNewline()
@@ -39,7 +39,7 @@ spotless {
             exclude '**/.gradle/**'
             exclude '**/build/install/**'
         }
-        ktlint('0.31.0')
+        ktlint()
         trimTrailingWhitespace()
         endWithNewline()
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
@@ -50,6 +50,14 @@ spotless {
         endWithNewline()
         indentWithSpaces(4)
     }
+}
+
+tasks.spotlessJava {
+    dependsOn(tasks.compileGroovy, tasks.pluginDescriptors, tasks.processResources, tasks.spotlessGroovyGradle, 'spotlessGroovy')
+}
+
+tasks.spotlessKotlin {
+    dependsOn(tasks.spotlessJava)
 }
 
 spotlessCheck.dependsOn('downloadJavaLicense', 'downloadFormatterProperties')

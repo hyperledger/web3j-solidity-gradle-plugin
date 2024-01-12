@@ -86,7 +86,7 @@ class SolidityPlugin implements Plugin<Project> {
         def defaultOutputDir = new File(project.buildDir, "resources/$sourceSet.name/$NAME")
 
         soliditySourceSet.solidity.srcDir(defaultSrcDir)
-        soliditySourceSet.solidity.outputDir = defaultOutputDir
+        soliditySourceSet.solidity.destinationDirectory = defaultOutputDir
 
         sourceSet.allJava.source(soliditySourceSet.solidity)
         sourceSet.allSource.source(soliditySourceSet.solidity)
@@ -122,7 +122,7 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.evmVersion = project.solidity.evmVersion
         compileTask.allowPaths = project.solidity.allowPaths
         compileTask.ignoreMissing = project.solidity.ignoreMissing
-        compileTask.outputs.dir(soliditySourceSet.solidity.outputDir)
+        compileTask.outputs.dir(soliditySourceSet.solidity.destinationDirectory)
         compileTask.description = "Compiles $sourceSet.name Solidity source."
 
         if (project.solidity.resolvePackages) {

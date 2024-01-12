@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
     id 'groovy'
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.12.0'
-    id 'com.diffplug.gradle.spotless' version '4.5.1'
+    id 'com.gradle.plugin-publish' version '1.2.1'
+    id 'com.diffplug.spotless' version '6.23.3'
     id 'de.undercouch.download' version '4.1.1'
 }
 
@@ -38,15 +38,15 @@ gradlePlugin {
     }
 }
 
-pluginBundle {
+gradlePlugin {
     website = 'https://web3j.io/'
     vcsUrl = 'https://github.com/web3j/solidity-gradle-plugin'
     description = 'Gradle plugin providing tasks to compile Solidity contracts.'
-    tags = ['solidity', 'ethereum']
     plugins {
         solidity {
             // id is captured from java-gradle-plugin configuration
             displayName = project.description
+            tags = ['solidity', 'ethereum']
         }
     }
 }
@@ -61,7 +61,7 @@ ext {
     junitVersion = '4.13'
     assertjVersion = '3.17.1'
     systemRulesVersion = '1.19.0'
-    nodePluginVersion = '5.0.0'
+    nodePluginVersion = '7.0.1'
 }
 
 dependencies {
@@ -75,7 +75,6 @@ dependencies {
 spotless {
     groovy {
         excludeJava() // excludes all Java sources within the Groovy source dirs from formatting
-        paddedCell() // Avoid cyclic ambiguities
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
     }
 }
