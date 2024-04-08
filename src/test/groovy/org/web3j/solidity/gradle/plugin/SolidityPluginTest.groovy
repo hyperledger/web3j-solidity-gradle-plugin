@@ -320,6 +320,8 @@ class SolidityPluginTest {
                     }
                 }
             }
+
+            tasks.named("jar").configure { dependsOn("compileSolidity") }
         """
 
         def success = build()

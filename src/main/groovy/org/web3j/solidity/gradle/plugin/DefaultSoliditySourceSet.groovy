@@ -15,7 +15,6 @@ package org.web3j.solidity.gradle.plugin
 import groovy.transform.CompileStatic
 import org.gradle.api.Action
 import org.gradle.api.file.SourceDirectorySet
-import org.gradle.api.internal.file.SourceDirectorySetFactory
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.reflect.HasPublicType
 import org.gradle.api.reflect.TypeOf
