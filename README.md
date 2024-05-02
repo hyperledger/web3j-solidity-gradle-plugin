@@ -1,4 +1,4 @@
-Solidity Gradle Plugin
+Web3j Solidity Gradle Plugin
 ======================
 
 Simple Gradle plugin used by the [Web3j plugin](https://github.com/web3j/web3j-gradle-plugin) 
