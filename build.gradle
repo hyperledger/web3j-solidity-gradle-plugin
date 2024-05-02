@@ -17,7 +17,7 @@ apply {
         'spotless'
     ].each { buildScript ->
         download {
-            src "https://raw.githubusercontent.com/web3j/build-tools/master/gradle/$buildScript/build.gradle"
+            src "https://raw.githubusercontent.com/hyperledger/web3j-build-tools/main/gradle/$buildScript/build.gradle"
             dest "$rootDir/gradle/$buildScript/build.gradle"
             overwrite false
             quiet true
@@ -40,7 +40,7 @@ gradlePlugin {
 
 pluginBundle {
     website = 'https://web3j.io/'
-    vcsUrl = 'https://github.com/web3j/solidity-gradle-plugin'
+    vcsUrl = 'https://github.com/hyperledger/web3j-solidity-gradle-plugin'
     description = 'Gradle plugin providing tasks to compile Solidity contracts.'
     tags = ['solidity', 'ethereum']
     plugins {
@@ -57,7 +57,7 @@ repositories {
 }
 
 ext {
-    soktVersion = '0.2.4'
+    soktVersion = '0.3.0'
     junitVersion = '4.13'
     assertjVersion = '3.17.1'
     systemRulesVersion = '1.19.0'
