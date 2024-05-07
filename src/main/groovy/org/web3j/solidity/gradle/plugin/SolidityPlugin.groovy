@@ -116,13 +116,25 @@ class SolidityPlugin implements Plugin<Project> {
             compileTask.executable = project.solidity.executable
         }
         compileTask.pathRemappings = project.solidity.pathRemappings
-        compileTask.version = project.solidity.version
+        if (soliditySourceSet.getVersion()){
+            compileTask.version = soliditySourceSet.getVersion()
+        } else {
+            compileTask.version = project.solidity.version
+        }
         compileTask.source = soliditySourceSet.solidity
         compileTask.outputComponents = project.solidity.outputComponents
         compileTask.combinedOutputComponents = project.solidity.combinedOutputComponents
         compileTask.overwrite = project.solidity.overwrite
-        compileTask.optimize = project.solidity.optimize
-        compileTask.optimizeRuns = project.solidity.optimizeRuns
+        if (soliditySourceSet.getOptimize()){
+            compileTask.optimize = soliditySourceSet.getOptimize()
+        } else {
+            compileTask.optimize = project.solidity.optimize
+        }
+        if (soliditySourceSet.getOptimizeRunsn()){
+            compileTask.optimizeRuns = soliditySourceSet.getOptimizeRunsn()
+        } else {
+            compileTask.optimizeRuns = project.solidity.optimizeRuns
+        }
         compileTask.prettyJson = project.solidity.prettyJson
         if (soliditySourceSet.getEvmVersion()){
             compileTask.evmVersion = soliditySourceSet.getEvmVersion()
@@ -130,7 +142,11 @@ class SolidityPlugin implements Plugin<Project> {
             compileTask.evmVersion = project.solidity.evmVersion
         }
         compileTask.allowPaths = project.solidity.allowPaths
-        compileTask.ignoreMissing = project.solidity.ignoreMissing
+        if (soliditySourceSet.getIgnoreMissing()){
+            compileTask.ignoreMissing = soliditySourceSet.getIgnoreMissing()
+        } else {
+            compileTask.ignoreMissing = project.solidity.ignoreMissing
+        }
         compileTask.outputs.dir(soliditySourceSet.solidity.destinationDirectory)
         compileTask.description = "Compiles $sourceSet.name Solidity source."
 
