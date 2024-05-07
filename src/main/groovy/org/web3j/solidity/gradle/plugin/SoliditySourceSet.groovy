@@ -61,10 +61,24 @@ interface SoliditySourceSet {
 
     String NAME = "solidity"
 
-    // New method to set the EVM version for the Solidity compiler
     void setEvmVersion(EVMVersion evmVersion)
 
-    // New method to get the EVM version for the Solidity compiler
     EVMVersion getEvmVersion()
+
+    void setVersion(String version)
+
+    String getVersion()
+
+    void setOptimize(Boolean optimize)
+
+    Boolean getOptimize()
+
+    void setOptimizeRuns(Integer optimizeRuns)
+
+    Integer getOptimizeRunsn()
+
+    void setIgnoreMissing(Boolean ignoreMissing)
+
+    Boolean getIgnoreMissing()
 
 }

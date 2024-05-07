@@ -124,8 +124,11 @@ class SolidityPlugin implements Plugin<Project> {
         compileTask.optimize = project.solidity.optimize
         compileTask.optimizeRuns = project.solidity.optimizeRuns
         compileTask.prettyJson = project.solidity.prettyJson
-//        compileTask.evmVersion = project.solidity.${srcSetName}.evmVersion
-        compileTask.evmVersion = soliditySourceSet.getEvmVersion()
+        if (soliditySourceSet.getEvmVersion()){
+            compileTask.evmVersion = soliditySourceSet.getEvmVersion()
+        } else {
+            compileTask.evmVersion = project.solidity.evmVersion
+        }
         compileTask.allowPaths = project.solidity.allowPaths
         compileTask.ignoreMissing = project.solidity.ignoreMissing
         compileTask.outputs.dir(soliditySourceSet.solidity.destinationDirectory)
