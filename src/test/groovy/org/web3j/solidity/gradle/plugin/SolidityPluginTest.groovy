@@ -191,9 +191,7 @@ class SolidityPluginTest {
             plugins {
                id 'org.web3j.solidity'
             }
-            solidity {
-                evmVersion = 'ISTANBUL'
-            }
+            
             sourceSets {
                main {
                    solidity {
@@ -204,6 +202,7 @@ class SolidityPluginTest {
                        exclude "openzeppelin/**"
                        exclude "$differentVersionsFolderName/**"
                    }
+                   setEvmVersion("ISTANBUL")
                }
             tasks.named("jar").configure { dependsOn("compileSolidity") }
             }

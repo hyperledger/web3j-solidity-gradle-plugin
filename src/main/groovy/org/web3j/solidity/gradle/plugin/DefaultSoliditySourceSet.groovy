@@ -28,6 +28,7 @@ class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
 
     private final SourceDirectorySet solidity
     private final SourceDirectorySet allSolidity
+    private EVMVersion evmVersion
 
     DefaultSoliditySourceSet(
             final String displayName,
@@ -66,6 +67,17 @@ class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
     @Override
     TypeOf<?> getPublicType() {
         return TypeOf.typeOf(SoliditySourceSet.class)
+    }
+
+    // Implementations for evmVersion handling
+    @Override
+    void setEvmVersion(EVMVersion evmVersion) {
+        this.evmVersion =  evmVersion
+    }
+
+    @Override
+    EVMVersion getEvmVersion() {
+        return this.evmVersion
     }
 
 }
