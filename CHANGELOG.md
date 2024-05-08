@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.2]() (Upcoming)
+
+### Bug Fixes
+
+* 
+
+### Features
+
+* Different solidity compile config for different sourceSets [#69](https://github.com/hyperledger/web3j-solidity-gradle-plugin/pull/69)
+
+### BREAKING CHANGES
+
+* 
+
 # [0.4.1](https://github.com/web3j/solidity-gradle-plugin/releases/tag/v0.4.1) (2024-05-02)
 
 ### Bug Fixes

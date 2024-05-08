@@ -61,4 +61,24 @@ interface SoliditySourceSet {
 
     String NAME = "solidity"
 
+    void setEvmVersion(EVMVersion evmVersion)
+
+    EVMVersion getEvmVersion()
+
+    void setVersion(String version)
+
+    String getVersion()
+
+    void setOptimize(Boolean optimize)
+
+    Boolean getOptimize()
+
+    void setOptimizeRuns(Integer optimizeRuns)
+
+    Integer getOptimizeRunsn()
+
+    void setIgnoreMissing(Boolean ignoreMissing)
+
+    Boolean getIgnoreMissing()
+
 }

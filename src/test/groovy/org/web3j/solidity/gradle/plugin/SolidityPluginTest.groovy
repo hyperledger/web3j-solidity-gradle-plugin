@@ -224,6 +224,46 @@ class SolidityPluginTest {
     }
 
     @Test
+    void compileSolidityWithSourceSetsSpecificConfig() {
+        buildFile << """
+            plugins {
+               id 'org.web3j.solidity'
+            }
+            
+            sourceSets {
+               main {
+                   solidity {
+                       exclude "sol5/**"
+                       exclude "eip/**"
+                       exclude "greeter/**"
+                       exclude "common/**"
+                       exclude "openzeppelin/**"
+                       exclude "$differentVersionsFolderName/**"
+                   }
+               setEvmVersion('ISTANBUL')
+               setOptimize(true)
+               setOptimizeRuns(200)
+               setVersion('0.8.12')
+               }
+            tasks.named("jar").configure { dependsOn("compileSolidity") }
+            }
+        """
+
+        def success = build()
+        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+
+        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
+        def compiledAbi = new File(compiledSolDir, "MinimalForwarder.abi")
+        assertTrue(compiledAbi.exists())
+
+        def compiledBin = new File(compiledSolDir, "MinimalForwarder.bin")
+        assertTrue(compiledBin.exists())
+
+        def upToDate = build()
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+    }
+
+    @Test
     @Ignore("Requires a specific solc version on the machine to pass")
     void compileSolidityWithExecutable() {
         buildFile << """

@@ -28,6 +28,11 @@ class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
 
     private final SourceDirectorySet solidity
     private final SourceDirectorySet allSolidity
+    private EVMVersion evmVersion
+    private String version
+    private Boolean optimize
+    private Integer optimizeRuns
+    private Boolean ignoreMissing
 
     DefaultSoliditySourceSet(
             final String displayName,
@@ -68,4 +73,53 @@ class DefaultSoliditySourceSet implements SoliditySourceSet, HasPublicType {
         return TypeOf.typeOf(SoliditySourceSet.class)
     }
 
+    @Override
+    void setEvmVersion(EVMVersion evmVersion) {
+        this.evmVersion =  evmVersion
+    }
+
+    @Override
+    EVMVersion getEvmVersion() {
+        return this.evmVersion
+    }
+
+    @Override
+    void setVersion(String version) {
+        this.version =  version
+    }
+
+    @Override
+    String getVersion() {
+        return this.version
+    }
+
+    @Override
+    void setOptimize(Boolean optimize) {
+        this.optimize = optimize
+    }
+
+    @Override
+    Boolean getOptimize() {
+        return this.optimize
+    }
+
+    @Override
+    void setOptimizeRuns(Integer optimizeRuns) {
+        this.optimizeRuns = optimizeRuns
+    }
+
+    @Override
+    Integer getOptimizeRunsn() {
+        return this.optimizeRuns
+    }
+
+    @Override
+    void setIgnoreMissing(Boolean ignoreMissing) {
+        this.ignoreMissing = ignoreMissing
+    }
+
+    @Override
+    Boolean getIgnoreMissing() {
+        return this.ignoreMissing
+    }
 }

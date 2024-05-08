@@ -85,6 +85,26 @@ sourceSets {
 }
 ```
 
+Now with solidity gradle plugin version 0.4.2, you can set different solidity versions, evmVersions, optimize flag, optimizeRuns and ignoreMissing 
+flag values for different sourceSets.
+
+```groovy
+sourceSets {
+    main {
+        solidity {
+            srcDir {
+                "my/custom/path/to/solidity"
+            }
+            output.resourcesDir = file('out/bin/compiledSol')
+            setEvmVersion('ISTANBUL')
+            setOptimize(true)
+            setOptimizeRuns(200)
+            setVersion('0.8.12')
+        }
+    }
+}
+```
+
 ## Gradle Node Plugin
 
 The plugin makes use of the [Node plugin](https://github.com/node-gradle/gradle-node-plugin) to resolve third-party
