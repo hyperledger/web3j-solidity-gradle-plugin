@@ -5,3 +5,4 @@
 /lib
 *.iml
 gradle.properties
+/lib
