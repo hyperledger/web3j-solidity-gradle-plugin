@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.4.2]() (Upcoming)
+# [0.5.0]() (Upcoming)
 
 ### Bug Fixes
 
@@ -15,7 +15,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### BREAKING CHANGES
 
-* 
+* Upgrade to gradle 8.7 [#70](https://github.com/hyperledger/web3j-solidity-gradle-plugin/pull/70)
 
 # [0.4.1](https://github.com/web3j/solidity-gradle-plugin/releases/tag/v0.4.1) (2024-05-02)
 

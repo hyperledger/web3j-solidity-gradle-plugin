@@ -3,9 +3,9 @@ plugins {
     id 'maven-publish'
     id 'groovy'
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.12.0'
-    id 'com.diffplug.gradle.spotless' version '4.5.1'
-    id 'de.undercouch.download' version '4.1.1'
+    id 'com.gradle.plugin-publish' version '1.2.1'
+    id 'com.diffplug.spotless' version '6.25.0'
+    id 'de.undercouch.download' version '4.1.2'
 }
 
 apply {
@@ -14,7 +14,8 @@ apply {
         'java',
         'javadoc',
         'repositories',
-        'spotless'
+        'spotless',
+        'junit'
     ].each { buildScript ->
         download {
             src "https://raw.githubusercontent.com/hyperledger/web3j-build-tools/main/gradle/$buildScript/build.gradle"
@@ -38,15 +39,15 @@ gradlePlugin {
     }
 }
 
-pluginBundle {
+gradlePlugin {
     website = 'https://web3j.io/'
     vcsUrl = 'https://github.com/hyperledger/web3j-solidity-gradle-plugin'
     description = 'Gradle plugin providing tasks to compile Solidity contracts.'
-    tags = ['solidity', 'ethereum']
     plugins {
         solidity {
             // id is captured from java-gradle-plugin configuration
             displayName = project.description
+            tags = ['solidity', 'ethereum']
         }
     }
 }
@@ -58,16 +59,15 @@ repositories {
 
 ext {
     soktVersion = '0.3.0'
-    junitVersion = '4.13'
-    assertjVersion = '3.17.1'
+    junitVersion = '5.9.3'
+    assertjVersion = '3.25.3'
     systemRulesVersion = '1.19.0'
-    nodePluginVersion = '5.0.0'
+    nodePluginVersion = '7.0.2'
 }
 
 dependencies {
     implementation "org.web3j:web3j-sokt:$soktVersion"
     implementation "com.github.node-gradle:gradle-node-plugin:$nodePluginVersion"
-    testImplementation "junit:junit:$junitVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "com.github.stefanbirkner:system-rules:$systemRulesVersion"
 }
@@ -75,7 +75,6 @@ dependencies {
 spotless {
     groovy {
         excludeJava() // excludes all Java sources within the Groovy source dirs from formatting
-        paddedCell() // Avoid cyclic ambiguities
         licenseHeaderFile "$rootDir/gradle/spotless/java.license"
     }
 }

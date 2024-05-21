@@ -14,16 +14,20 @@ package org.web3j.solidity.gradle.plugin
 
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.*
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 
 import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertTrue
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class SolidityPluginTest {
 
@@ -31,8 +35,7 @@ class SolidityPluginTest {
      * Gradle project directory where the test project will be run.
      * Has to be under <code>/tmp</code> because of Docker file sharing defaults.
      */
-    @Rule
-    public final TemporaryFolder testProjectDir = new TemporaryFolder(new File('/tmp'))
+    private Path testProjectDir
 
     /**
      * Folder containing Solidity smart contracts with different versions.
@@ -42,34 +45,38 @@ class SolidityPluginTest {
     /**
      * Solidity sources directory.
      */
-    private static File sourcesDir
+    private static Path sourcesDir
 
     /**
      * Gradle build file.
      */
-    private File buildFile
+    private Path buildFile
 
-    @BeforeClass
+    @BeforeAll
     static void setUp() throws Exception {
         final def resource = SolidityPlugin.getClassLoader().getResource('solidity/eip/EIP20.sol')
-        sourcesDir = new File(resource.file).parentFile.parentFile
+        sourcesDir = Paths.get(resource.toURI()).getParent().getParent()
     }
 
-    @Before
+    @BeforeEach
     void setup() throws IOException {
-        buildFile = testProjectDir.newFile('build.gradle')
-        testProjectDir.newFolder('src', 'main')
-        Files.walk(sourcesDir.toPath()).each {
-            // Copy .sol files into temp folder for Docker
-            final def fileName = sourcesDir.relativePath(it.toFile())
-            final def file = testProjectDir.newFile("src/main/solidity/$fileName")
-            Files.copy(it, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        testProjectDir = Files.createTempDirectory("testProjectDir")
+        buildFile = Files.createFile(testProjectDir.resolve('build.gradle'))
+        Files.createDirectories(testProjectDir.resolve('src/main/solidity'))
+        Files.walk(sourcesDir).forEach {
+            if (Files.isRegularFile(it)) {
+                // Copy .sol files into temp folder for Docker
+                final def fileName = sourcesDir.relativize(it).toString()
+                final def file = testProjectDir.resolve("src/main/solidity/$fileName")
+                Files.createDirectories(file.getParent())
+                Files.copy(it, file, StandardCopyOption.REPLACE_EXISTING)
+            }
         }
     }
 
     @Test
     void compileSolidity() {
-        buildFile << """
+        Files.writeString(buildFile, """
             plugins {
                id 'org.web3j.solidity'
             }
@@ -86,28 +93,23 @@ class SolidityPluginTest {
                 }
             tasks.named("jar").configure { dependsOn("compileSolidity") }
             }
-        """
+        """)
 
         def success = build()
-        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+        assertEquals(SUCCESS, success.task(":compileSolidity").getOutcome())
 
-        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
-        def compiledAbi = new File(compiledSolDir, "Greeter.abi")
-        assertTrue(compiledAbi.exists())
-
-        def compiledBin = new File(compiledSolDir, "Greeter.bin")
-        assertTrue(compiledBin.exists())
-
-        def generatedMeta = new File(compiledSolDir, "Greeter_meta.json")
-        assertTrue(generatedMeta.exists())
+        def compiledSolDir = testProjectDir.resolve("build/resources/main/solidity")
+        assertTrue(Files.exists(compiledSolDir.resolve("Greeter.abi")))
+        assertTrue(Files.exists(compiledSolDir.resolve("Greeter.bin")))
+        assertTrue(Files.exists(compiledSolDir.resolve("Greeter_meta.json")))
 
         def upToDate = build()
-        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").getOutcome())
     }
 
     @Test
-    void compileSolidityWithLibraryImports() {
-        buildFile << """
+    void compileSolidityWithLibraryImports() throws IOException {
+        Files.writeString(buildFile, """
             plugins {
                id 'org.web3j.solidity'
             }
@@ -127,29 +129,24 @@ class SolidityPluginTest {
                 }
             }
             tasks.named("jar").configure { dependsOn("compileSolidity") }
-        """
+        """)
 
         def success = build()
-        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+        assertEquals(SUCCESS, success.task(":compileSolidity").getOutcome())
 
-        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
-        def compiledAbi = new File(compiledSolDir, "MyCollectible.abi")
-        assertTrue(compiledAbi.exists())
-
-        def compiledBin = new File(compiledSolDir, "MyCollectible.bin")
-        assertTrue(compiledBin.exists())
-
-        def erc721Abi = new File(compiledSolDir, "ERC721.abi")
-        assertTrue(erc721Abi.exists())
+        def compiledSolDir = testProjectDir.resolve("build/resources/main/solidity")
+        assertTrue(Files.exists(compiledSolDir.resolve("MyCollectible.abi")))
+        assertTrue(Files.exists(compiledSolDir.resolve("MyCollectible.bin")))
+        assertTrue(Files.exists(compiledSolDir.resolve("ERC721.abi")))
 
         def upToDate = build()
-        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
-        assertEquals(UP_TO_DATE, upToDate.task(":resolveSolidity").outcome)
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").getOutcome())
+        assertEquals(UP_TO_DATE, upToDate.task(":resolveSolidity").getOutcome())
     }
 
     @Test
-    void compileSolidityWithVersion() {
-        buildFile << """
+    void compileSolidityWithVersion() throws IOException {
+        Files.writeString(buildFile, """
             plugins {
                id 'org.web3j.solidity'
             }
@@ -169,25 +166,22 @@ class SolidityPluginTest {
                }
             tasks.named("jar").configure { dependsOn("compileSolidity") }
             }
-        """
+        """)
 
         def success = build()
-        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+        assertEquals(SUCCESS, success.task(":compileSolidity").getOutcome())
 
-        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
-        def compiledAbi = new File(compiledSolDir, "EIP20.abi")
-        assertTrue(compiledAbi.exists())
-
-        def compiledBin = new File(compiledSolDir, "EIP20.bin")
-        assertTrue(compiledBin.exists())
+        def compiledSolDir = testProjectDir.resolve("build/resources/main/solidity")
+        assertTrue(Files.exists(compiledSolDir.resolve("EIP20.abi")))
+        assertTrue(Files.exists(compiledSolDir.resolve("EIP20.bin")))
 
         def upToDate = build()
-        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").getOutcome())
     }
 
     @Test
-    void compileSolidityWithEvmVersion() {
-        buildFile << """
+    void compileSolidityWithEvmVersion() throws IOException {
+        Files.writeString(buildFile, """
             plugins {
                id 'org.web3j.solidity'
             }
@@ -207,25 +201,22 @@ class SolidityPluginTest {
                }
             tasks.named("jar").configure { dependsOn("compileSolidity") }
             }
-        """
+        """)
 
         def success = build()
-        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+        assertEquals(SUCCESS, success.task(":compileSolidity").getOutcome())
 
-        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
-        def compiledAbi = new File(compiledSolDir, "MinimalForwarder.abi")
-        assertTrue(compiledAbi.exists())
-
-        def compiledBin = new File(compiledSolDir, "MinimalForwarder.bin")
-        assertTrue(compiledBin.exists())
+        def compiledSolDir = testProjectDir.resolve("build/resources/main/solidity")
+        assertTrue(Files.exists(compiledSolDir.resolve("MinimalForwarder.abi")))
+        assertTrue(Files.exists(compiledSolDir.resolve("MinimalForwarder.bin")))
 
         def upToDate = build()
-        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").getOutcome())
     }
 
     @Test
-    void compileSolidityWithSourceSetsSpecificConfig() {
-        buildFile << """
+    void compileSolidityWithSourceSetsSpecificConfig() throws IOException {
+        Files.writeString(buildFile, """
             plugins {
                id 'org.web3j.solidity'
             }
@@ -247,26 +238,23 @@ class SolidityPluginTest {
                }
             tasks.named("jar").configure { dependsOn("compileSolidity") }
             }
-        """
+        """)
 
         def success = build()
-        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+        assertEquals(SUCCESS, success.task(":compileSolidity").getOutcome())
 
-        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
-        def compiledAbi = new File(compiledSolDir, "MinimalForwarder.abi")
-        assertTrue(compiledAbi.exists())
-
-        def compiledBin = new File(compiledSolDir, "MinimalForwarder.bin")
-        assertTrue(compiledBin.exists())
+        def compiledSolDir = testProjectDir.resolve("build/resources/main/solidity")
+        assertTrue(Files.exists(compiledSolDir.resolve("MinimalForwarder.abi")))
+        assertTrue(Files.exists(compiledSolDir.resolve("MinimalForwarder.bin")))
 
         def upToDate = build()
-        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").getOutcome())
     }
 
     @Test
-    @Ignore("Requires a specific solc version on the machine to pass")
-    void compileSolidityWithExecutable() {
-        buildFile << """
+    @Disabled("Requires a specific solc version on the machine to pass")
+    void compileSolidityWithExecutable() throws IOException {
+        Files.writeString(buildFile, """
             plugins {
                id 'org.web3j.solidity'
             }
@@ -285,28 +273,23 @@ class SolidityPluginTest {
                     }
                 }
             }
-        """
+        """)
+
         def success = build()
-        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+        assertEquals(SUCCESS, success.task(":compileSolidity").getOutcome())
 
-        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
-        def compiledAbi = new File(compiledSolDir, "EIP20.abi")
-        assertTrue(compiledAbi.exists())
-
-        def compiledBin = new File(compiledSolDir, "EIP20.bin")
-        assertTrue(compiledBin.exists())
+        def compiledSolDir = testProjectDir.resolve("build/resources/main/solidity")
+        assertTrue(Files.exists(compiledSolDir.resolve("EIP20.abi")))
+        assertTrue(Files.exists(compiledSolDir.resolve("EIP20.bin")))
 
         def upToDate = build()
-        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").getOutcome())
     }
 
-    /**
-     * Requires a running Docker environment.
-     */
     @Test
-    @Ignore("This is cool but fails if docker is not running. // Needs to be solved in the CI")
-    void compileSolidityWithDocker() {
-        buildFile << """
+    @Disabled("This is cool but fails if docker is not running. // Needs to be solved in the CI")
+    void compileSolidityWithDocker() throws IOException {
+        Files.writeString(buildFile, """
             plugins {
                id 'org.web3j.solidity'
             }
@@ -322,29 +305,26 @@ class SolidityPluginTest {
                 }
             }
             solidity {
-                executable = 'docker run --rm -v $testProjectDir.root:/src satran004/aion-fastvm:0.3.1 solc'
+                executable = 'docker run --rm -v \$testProjectDir.root:/src satran004/aion-fastvm:0.3.1 solc'
                 allowPaths = ['/src/src/main/solidity']
                 version = '0.4.15'
             }
-        """
+        """)
 
         def success = build()
-        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+        assertEquals(SUCCESS, success.task(":compileSolidity").getOutcome())
 
-        def compiledSolDir = new File(testProjectDir.root, "build/resources/main/solidity")
-        def compiledAbi = new File(compiledSolDir, "Greeter.abi")
-        assertTrue(compiledAbi.exists())
-
-        def compiledBin = new File(compiledSolDir, "Greeter.bin")
-        assertTrue(compiledBin.exists())
+        def compiledSolDir = testProjectDir.resolve("build/resources/main/solidity")
+        assertTrue(Files.exists(compiledSolDir.resolve("Greeter.abi")))
+        assertTrue(Files.exists(compiledSolDir.resolve("Greeter.bin")))
 
         def upToDate = build()
-        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").outcome)
+        assertEquals(UP_TO_DATE, upToDate.task(":compileSolidity").getOutcome())
     }
 
     @Test
-    void compileSolidityWithDifferentVersions() {
-        buildFile << """
+    void compileSolidityWithDifferentVersions() throws IOException {
+        Files.writeString(buildFile, """
             plugins {
                id 'org.web3j.solidity'
             }
@@ -360,17 +340,17 @@ class SolidityPluginTest {
                     }
                 }
             }
-
+    
             tasks.named("jar").configure { dependsOn("compileSolidity") }
-        """
+        """)
 
         def success = build()
-        assertEquals(SUCCESS, success.task(":compileSolidity").outcome)
+        assertEquals(SUCCESS, success.task(":compileSolidity").getOutcome())
     }
 
     private BuildResult build() {
         return GradleRunner.create()
-                .withProjectDir(testProjectDir.root)
+                .withProjectDir(testProjectDir.toFile())
                 .withArguments("build", "--info")
                 .withPluginClasspath()
                 .forwardOutput()
