@@ -4,8 +4,8 @@ plugins {
     id 'groovy'
     id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '1.2.1'
-    id 'com.diffplug.spotless' version '6.23.3'
-    id 'de.undercouch.download' version '4.1.1'
+    id 'com.diffplug.spotless' version '6.25.0'
+    id 'de.undercouch.download' version '4.1.2'
 }
 
 apply {
@@ -14,7 +14,8 @@ apply {
         'java',
         'javadoc',
         'repositories',
-        'spotless'
+        'spotless',
+        'junit'
     ].each { buildScript ->
         download {
             src "https://raw.githubusercontent.com/hyperledger/web3j-build-tools/main/gradle/$buildScript/build.gradle"
@@ -58,16 +59,15 @@ repositories {
 
 ext {
     soktVersion = '0.3.0'
-    junitVersion = '4.13'
-    assertjVersion = '3.17.1'
+    junitVersion = '5.9.3'
+    assertjVersion = '3.25.3'
     systemRulesVersion = '1.19.0'
-    nodePluginVersion = '7.0.1'
+    nodePluginVersion = '7.0.2'
 }
 
 dependencies {
     implementation "org.web3j:web3j-sokt:$soktVersion"
     implementation "com.github.node-gradle:gradle-node-plugin:$nodePluginVersion"
-    testImplementation "junit:junit:$junitVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testImplementation "com.github.stefanbirkner:system-rules:$systemRulesVersion"
 }
