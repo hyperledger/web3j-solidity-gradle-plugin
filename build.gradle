@@ -31,26 +31,20 @@ apply {
 description = 'Solidity Gradle Plugin'
 
 gradlePlugin {
+    website = 'https://web3j.io/'
+    vcsUrl = 'https://github.com/hyperledger/web3j-solidity-gradle-plugin'
     plugins {
         solidity {
             id = 'org.web3j.solidity'
             implementationClass = 'org.web3j.solidity.gradle.plugin.SolidityPlugin'
-        }
-    }
-}
-
-gradlePlugin {
-    website = 'https://web3j.io/'
-    vcsUrl = 'https://github.com/hyperledger/web3j-solidity-gradle-plugin'
-    description = 'Gradle plugin providing tasks to compile Solidity contracts.'
-    plugins {
-        solidity {
-            // id is captured from java-gradle-plugin configuration
-            displayName = project.description
+            displayName = 'Solidity Plugin'
+            description = 'Gradle plugin providing tasks to compile Solidity contracts.'
             tags = ['solidity', 'ethereum']
         }
     }
 }
+
+
 repositories {
     maven {
         url "https://plugins.gradle.org/m2/"
