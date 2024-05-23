@@ -58,7 +58,7 @@ repositories {
 }
 
 ext {
-    soktVersion = '0.3.0'
+    soktVersion = '0.4.0'
     junitVersion = '5.9.3'
     assertjVersion = '3.25.3'
     systemRulesVersion = '1.19.0'

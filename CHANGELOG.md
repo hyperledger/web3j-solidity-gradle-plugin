@@ -12,6 +12,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * Different solidity compile config for different sourceSets [#69](https://github.com/hyperledger/web3j-solidity-gradle-plugin/pull/69)
+* Added CANCUN evmVersion [#71](https://github.com/hyperledger/web3j-solidity-gradle-plugin/pull/71)
 
 ### BREAKING CHANGES
 
