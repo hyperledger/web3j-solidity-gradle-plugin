@@ -26,7 +26,8 @@ enum EVMVersion {
     BERLIN('berlin'),
     LONDON('london'),
     PARIS('paris'),
-    SHANGHAI('shanghai')
+    SHANGHAI('shanghai'),
+    CANCUN('cancun')
 
     private String value
 
